@@ -1,60 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical">
 
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:visibility="visible"
-        android:orientation="vertical">
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Grids"
+        app:icon="@drawable/add_ic"
+        android:textColor="@color/white"
+        android:layout_centerInParent="true"
+        app:iconTint="@color/white"
+        android:textStyle="bold"
+        android:textSize="16dp"
+        app:iconSize="30dp"
+        android:backgroundTint="@color/blue"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        app:contentPadding="10dp"
+        android:id="@+id/mainOptionsBtn"
+        android:backgroundTint="@color/themeColor"
+        app:cardCornerRadius="30dp"
+        android:layout_alignBaseline="@+id/bottomNavigation"
+        android:layout_above="@+id/bottomNavigation" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
+            android:paddingHorizontal="8dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/add_ic"
+                app:tint="@color/white"
+                android:layout_marginEnd="6dp"/>
 
 
             <TextView
-                android:id="@+id/tv_selected"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:textColor="#3c415e"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/etPageId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
-                android:inputType="numberDecimal"
-                android:hint="Page ID" />
-
-            <Button
-                android:id="@+id/btShow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Show" />
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:text="Buy Policy"/>
 
         </LinearLayout>
 
-        <tech.c1ph3rj.library.CurvedBottomNavigation
-            android:id="@+id/bottomNavigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:mbn_showLabel="true"
-            app:mbn_hasAnimation="true" />
+    </androidx.cardview.widget.CardView>
 
-    </FrameLayout>
+    <tech.c1ph3rj.library.CurvedBottomNavigation
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:mbn_labelTextColor="@color/themeColor"
+        app:mbn_selectedIconColor="@color/themeColor"
+        app:mbn_hasAnimation="true"
+        app:mbn_showLabel="false" />
 
-</LinearLayout>
+</RelativeLayout>

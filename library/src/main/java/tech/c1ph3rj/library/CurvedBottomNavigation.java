@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -80,6 +81,7 @@ public class CurvedBottomNavigation extends FrameLayout {
             countTypeface = Typeface.createFromAsset(context.getAssets(), typefacePath);
         }
 
+
         a.recycle();
     }
 
@@ -97,16 +99,37 @@ public class CurvedBottomNavigation extends FrameLayout {
         bezierView.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, heightCell));
         bezierView.setColor(backgroundBottomColor);
-        shadowColor = -0x454546;
+        if(shadowColor == 0) {
+            shadowColor = -0x454546;
+        }
         bezierView.setShadowColor(shadowColor);
 
         addView(bezierView);
         addView(ll_cells);
+
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int desiredHeight = dp(getContext(), (showLabel) ? 94 : 78); // Default height in dp
+
+        int mode = MeasureSpec.getMode(heightMeasureSpec);
+        int size = MeasureSpec.getSize(heightMeasureSpec);
+
+        int height;
+
+        if (mode == MeasureSpec.EXACTLY) {
+            // If height is explicitly set (e.g., match_parent or a specific value), use that value
+            height = size;
+        } else {
+            // Otherwise, use the default height or wrap content
+            height = Math.min(size, desiredHeight);
+        }
+
+        // Set the measured dimensions
+        setMeasuredDimension(getMeasuredWidth(), height);
+
         if (selectedId == -1) {
             bezierView.setBezierX(getLayoutDirection() == View.LAYOUT_DIRECTION_RTL
                     ? getMeasuredWidth() + dp(getContext(), 72) : -dp(getContext(), 72));

@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.View" parent="Base.Theme.View" />
+
+    <style name="BlackIconsStatusBarTheme" parent="Base.Theme.View">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/white</item>
+    </style>
 </resources>
