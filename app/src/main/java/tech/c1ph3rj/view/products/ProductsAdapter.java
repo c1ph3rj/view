@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
 
@@ -20,28 +23,32 @@ import java.util.List;
 import tech.c1ph3rj.view.R;
 import tech.c1ph3rj.view.line_of_business.LineOfBusinessModel;
 
-public class ProductsAdapter extends ArrayAdapter<LineOfBusinessModel> {
+public class ProductsAdapter extends ArrayAdapter<ProductsModel> {
+    onProductSelectionListener listener;
 
     private static class ViewHolder {
         TextView titleTextView;
         TextView descriptionTextView;
         ImageView iconView;
+        CheckBox checkBox;
+        CardView layout;
     }
 
-    public ProductsAdapter(Context context, List<LineOfBusinessModel> lineOfBusinessList) {
-        super(context, R.layout.list_item_line_of_business, lineOfBusinessList);
+    public ProductsAdapter(Context context, List<ProductsModel> productsList, onProductSelectionListener listener) {
+        super(context, R.layout.list_item_product, productsList);
+        this.listener = listener;
     }
 
 
     @Override
-    public void addAll(LineOfBusinessModel... items) {
+    public void addAll(ProductsModel... items) {
         super.addAll(items);
         notifyDataSetChanged();
     }
 
     @Nullable
     @Override
-    public LineOfBusinessModel getItem(int position) {
+    public ProductsModel getItem(int position) {
         return super.getItem(position);
     }
 
@@ -55,48 +62,59 @@ public class ProductsAdapter extends ArrayAdapter<LineOfBusinessModel> {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        LineOfBusinessModel lineOfBusiness = getItem(position);
-
+        ProductsModel productsModel = getItem(position);
         ViewHolder viewHolder;
 
         if (convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.list_item_line_of_business, parent, false);
-            viewHolder.titleTextView = convertView.findViewById(R.id.lobTitleView);
-            viewHolder.descriptionTextView = convertView.findViewById(R.id.lobDescriptionView);
-            viewHolder.iconView = convertView.findViewById(R.id.lobIconView);
+            convertView = inflater.inflate(R.layout.list_item_product, parent, false);
+            viewHolder.titleTextView = convertView.findViewById(R.id.titleView);
+            viewHolder.descriptionTextView = convertView.findViewById(R.id.descriptionView);
+            viewHolder.iconView = convertView.findViewById(R.id.iconView);
+            viewHolder.checkBox = convertView.findViewById(R.id.checkBoxView);
+            viewHolder.layout = convertView.findViewById(R.id.productLayout);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (lineOfBusiness != null) {
-            if (checkNull(lineOfBusiness.mdTitle)) {
-                viewHolder.titleTextView.setText(lineOfBusiness.mdTitle);
+        if(productsModel != null) {
+            if(checkNull(productsModel.productName)) {
+                viewHolder.titleTextView.setText(productsModel.productName);
             } else {
-                viewHolder.titleTextView.setText("-");
+                viewHolder.titleTextView.setText(" - ");
             }
 
-            if (checkNull(lineOfBusiness.mdDesc)) {
-                viewHolder.descriptionTextView.setText(lineOfBusiness.mdDesc);
+            if(checkNull(productsModel.productDescription)) {
+                viewHolder.descriptionTextView.setText(productsModel.productDescription);
             } else {
-                viewHolder.descriptionTextView.setText("-");
+                viewHolder.descriptionTextView.setText(" - ");
             }
 
-            if (checkNull(lineOfBusiness.iconURL)) {
-                Glide.with(getContext())
-                        .load(lineOfBusiness.iconURL)
-                        .error(R.drawable.warning_ic)
-                        .into(viewHolder.iconView);
-            } else {
-                Glide.with(getContext())
-                        .load(R.drawable.warning_ic)
-                        .into(viewHolder.iconView);
-            }
+            viewHolder.layout.setOnClickListener(onClickLayout -> viewHolder.checkBox.performClick());
+
+            viewHolder.checkBox.setChecked(productsModel.isChecked);
+
+            viewHolder.checkBox.setOnClickListener(onClickCheckBox -> {
+                if(listener != null) {
+                    if(!productsModel.isChecked) {
+                        listener.itemChecked(productsModel);
+                    } else {
+                        listener.itemRemoved(productsModel);
+                    }
+                }
+            });
         }
 
         return convertView;
+    }
+
+    public interface onProductSelectionListener {
+
+        void itemChecked(ProductsModel model);
+
+        void itemRemoved(ProductsModel model);
     }
 }
 

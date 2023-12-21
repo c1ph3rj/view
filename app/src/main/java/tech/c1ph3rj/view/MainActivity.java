@@ -8,7 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import tech.c1ph3rj.library.CurvedBottomNavigation;
+import tech.c1ph3rj.view.custom_forms.CustomForms;
 import tech.c1ph3rj.view.line_of_business.LineOfBusinessScreen;
+import tech.c1ph3rj.view.products.ProductsScreen;
+import tech.c1ph3rj.view.user_information.UserInformationScreen;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             mainOptionsBtn = findViewById(R.id.mainOptionsBtn);
             mainOptionsBtn.setOnClickListener(onClickMainOptions ->
                     startActivity(new Intent(this, LineOfBusinessScreen.class)));
-            startActivity(new Intent(this, LineOfBusinessScreen.class));
+            startActivity(new Intent(this, CustomForms.class));
         } catch (Exception e) {
             e.printStackTrace();
         }

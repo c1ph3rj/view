@@ -7,18 +7,18 @@
     android:orientation="vertical">
 
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create Grids"
-        app:icon="@drawable/add_ic"
-        android:textColor="@color/white"
-        android:layout_centerInParent="true"
-        app:iconTint="@color/white"
-        android:textStyle="bold"
-        android:textSize="16dp"
-        app:iconSize="30dp"
-        android:backgroundTint="@color/blue"/>
+<!--    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Create Grids"-->
+<!--        app:icon="@drawable/add_ic"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        app:iconTint="@color/white"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="16dp"-->
+<!--        app:iconSize="30dp"-->
+<!--        android:backgroundTint="@color/blue"/>-->
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"

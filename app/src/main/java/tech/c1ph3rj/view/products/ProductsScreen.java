@@ -3,19 +3,24 @@ package tech.c1ph3rj.view.products;
 import static tech.c1ph3rj.view.Services.checkNull;
 import static tech.c1ph3rj.view.Services.token;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.button.MaterialButton;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -32,8 +37,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import tech.c1ph3rj.view.R;
 import tech.c1ph3rj.view.Services;
-import tech.c1ph3rj.view.line_of_business.LineOfBusinessAdapter;
-import tech.c1ph3rj.view.line_of_business.LineOfBusinessModel;
+import tech.c1ph3rj.view.user_information.UserInformationScreen;
 
 public class ProductsScreen extends AppCompatActivity {
     Services services;
@@ -41,48 +45,99 @@ public class ProductsScreen extends AppCompatActivity {
     ImageView backBtn;
     ListView productsView;
     ShimmerFrameLayout loadingView;
-    LineOfBusinessAdapter productsAdapter;
-    List<LineOfBusinessModel> productsList;
+    ProductsAdapter productsAdapter;
+    List<ProductsModel> productsList;
+    ArrayList<String> selectedProducts;
+    LinearLayout nextBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products_screen);
-        services = new Services(this);
 
+        try {
+            ActionBar actionBar = getSupportActionBar();
+            if(actionBar != null) {
+                actionBar.setTitle("Products Screen");
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setHomeButtonEnabled(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        services = new Services(this);
         init();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        getOnBackPressedDispatcher().onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 
     void init() {
         try {
-            backBtn = findViewById(R.id.backBtn);
-            productsView = findViewById(R.id.lineOfBusinessView);
+            String lineOfBusinessId = getIntent().getStringExtra("lineOfBusinessId");
+            productsView = findViewById(R.id.productsView);
             searchView = findViewById(R.id.searchView);
             loadingView = findViewById(R.id.loadingView);
+            nextBtn = findViewById(R.id.nextBtn);
+            selectedProducts = new ArrayList<>();
 
-            productsAdapter = new LineOfBusinessAdapter(this, new ArrayList<>());
+            productsList = new ArrayList<>();
+
+            nextBtn.setOnClickListener(onClickNext -> {
+                Intent intent = new Intent(this, UserInformationScreen.class);
+                String[] productIds = new String[selectedProducts.size()];
+                for(int i = 0; i < selectedProducts.size(); i++) {
+                    String eachProductId = selectedProducts.get(i);
+                    productIds[i] = eachProductId;
+                }
+                intent.putExtra("productIds", productIds);
+                startActivity(intent);
+            });
+            productsAdapter = new ProductsAdapter(this, new ArrayList<>(), new ProductsAdapter.onProductSelectionListener() {
+
+                @Override
+                public void itemChecked(ProductsModel model) {
+//                    if(!selectedProducts.contains(model.productID)) {
+                        selectedProducts.add(model.productID);
+                        model.isChecked = true;
+                        checkNextBtnVisibility();
+//                    }
+                }
+
+                @Override
+                public void itemRemoved(ProductsModel model) {
+//                    if(selectedProducts.contains(model.productID)) {
+                        selectedProducts.remove(model.productID);
+                        model.isChecked = false;
+                        checkNextBtnVisibility();
+//                    }
+                }
+
+            });
             productsView.setAdapter(productsAdapter);
 
             productsView.setOnItemClickListener((adapterView, view, i, l) -> {
-                LineOfBusinessModel selectedItem = productsAdapter.getItem(i);
-                if (selectedItem != null) {
-                    String lineOfBusinessId = selectedItem.masterDataID;
-                    Intent intent = new Intent(this, ProductsScreen.class);
-                    intent.putExtra("lineOfBusinessId", lineOfBusinessId);
-                    startActivity(intent);
-                }
+
             });
             productsView.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
 
             loadingView.setVisibility(View.GONE);
             startLoading();
 
-            backBtn.setOnClickListener(onClickBack -> getOnBackPressedDispatcher().onBackPressed());
-
-            getAllLineOffBusinessAPI();
+            getAllProductsAPI(lineOfBusinessId);
 
         } catch (Exception e) {
             services.handleException(e);
+        }
+    }
+
+    private void checkNextBtnVisibility() {
+        if(nextBtn != null) {
+            nextBtn.setVisibility(selectedProducts.isEmpty() ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -106,13 +161,13 @@ public class ProductsScreen extends AppCompatActivity {
         });
     }
 
-    private void getAllLineOffBusinessAPI() {
+    private void getAllProductsAPI(String lineOfBusinessId) {
         try {
             if (services.isNetworkConnected()) {
                 if (services.checkGpsStatus()) {
                     new Thread(() -> {
                         try {
-                            String baseUrl = services.baseUrl + "api/digital/core/MasterData/FetchMasterData";
+                            String baseUrl = services.baseUrl + "api/digital/core/Product/GetAllProduct";
                             OkHttpClient client = new OkHttpClient.Builder()
                                     .connectTimeout(120, TimeUnit.SECONDS)
                                     .writeTimeout(120, TimeUnit.SECONDS)
@@ -121,7 +176,9 @@ public class ProductsScreen extends AppCompatActivity {
                             final MediaType JSON
                                     = MediaType.parse("application/json; charset=utf-8");
                             JsonObject details = new JsonObject();
-                            details.addProperty("functionalClassification", "26000");
+                            details.addProperty("pageSize", "100");
+                            details.addProperty("pageNumber", "1");
+                            details.addProperty("lineOfBusinessID", lineOfBusinessId);
 
                             String insertString = details.toString();
 
@@ -149,27 +206,34 @@ public class ProductsScreen extends AppCompatActivity {
                                             if (rCode.equals("401")) {
                                                 //TODO HANDLE UN AUTH
                                             } else if (rCode.equals("200")) {
-                                                // Parse the JSON array
-                                                JSONArray jsonArray = staticResObj.getJSONObject("rObj").getJSONArray("fetchMasterData");
+                                                JSONArray productsArray = staticResObj.getJSONObject("rObj").getJSONArray("getAllProduct");
 
-                                                // Create a list to store LineOfBusinessModel objects
-                                                productsList = new ArrayList<>();
+                                                productsList.clear();
+                                                for (int i = 0; i < productsArray.length(); i++) {
+                                                    JSONObject productObject = productsArray.getJSONObject(i);
 
-                                                // Iterate through the JSON array and create LineOfBusinessModel objects
-                                                for (int i = 0; i < jsonArray.length(); i++) {
-                                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                                    ProductsModel product = new ProductsModel();
+                                                    product.productID = productObject.optString("productID", "");
+                                                    product.productName = productObject.optString("productName", "");
+                                                    product.productUniqueID = productObject.optString("productUniqueID", "");
+                                                    product.productDescription = productObject.optString("productDescription", "");
+                                                    product.lineOfBusinessID = productObject.optString("lineOfBusinessID", "");
+                                                    product.lineOfBusinessText = productObject.optString("lineOfBusinessText", "");
+                                                    product.categoryID = productObject.optString("categoryID", "");
+                                                    product.categoryText = productObject.optString("categoryText", "");
+                                                    product.currencyID = productObject.optString("currencyID", "");
+                                                    product.currencyText = productObject.optString("currencyText", "");
+                                                    product.enforcementStartDate = productObject.optString("enforcementStartDate", "");
+                                                    product.enforcementEndDate = productObject.optString("enforcementEndDate", "");
+                                                    product.defaultPolicyPeriodID = productObject.optString("defaultPolicyPeriodID", "");
+                                                    product.defaultPolicyPeriodText = productObject.optString("defaultPolicyPeriodText", "");
+                                                    product.usedTags = productObject.optString("usedTags", "");
+                                                    product.addOnTags = productObject.optString("addOnTags", "");
+                                                    product.productStatusID = productObject.optString("productStatusID", "");
+                                                    product.productStatusText = productObject.optString("productStatusText", "");
+                                                    product.isChecked = false;
 
-                                                    LineOfBusinessModel lineOfBusiness = new LineOfBusinessModel();
-                                                    lineOfBusiness.masterDataID = jsonObject.optString("masterDataID", "");
-                                                    lineOfBusiness.parentMasterDataID = jsonObject.optString("parentMasterDataID", "");
-                                                    lineOfBusiness.mdCategoryID = jsonObject.optString("mdCategoryID", "");
-                                                    lineOfBusiness.mdTitle = jsonObject.optString("mdTitle", "");
-                                                    lineOfBusiness.mdDesc = jsonObject.optString("mdDesc", "");
-                                                    lineOfBusiness.mdValue = jsonObject.optString("mdValue", "");
-                                                    lineOfBusiness.iconURL = jsonObject.optString("iconURL", "");
-                                                    lineOfBusiness.regExValidation = jsonObject.optString("regExValidation", "");
-
-                                                    productsList.add(lineOfBusiness);
+                                                    productsList.add(product);
                                                 }
 
                                                 runOnUiThread(() -> {
@@ -230,12 +294,12 @@ public class ProductsScreen extends AppCompatActivity {
 
     public void filterData(String query) {
         // Create a new list to store the filtered data
-        List<LineOfBusinessModel> filteredData = new ArrayList<>();
+        List<ProductsModel> filteredData = new ArrayList<>();
 
         // Iterate through the original data and add matching items to the filtered list
-        for (LineOfBusinessModel model : productsList) {
+        for (ProductsModel model : productsList) {
             if (model != null) {
-                String itemName = model.mdTitle;
+                String itemName = model.productName;
                 if (itemName.toLowerCase().contains(query.toLowerCase().trim())) {
                     filteredData.add(model);
                 }

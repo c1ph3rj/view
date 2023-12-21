@@ -7,38 +7,12 @@
     android:orientation="vertical"
     tools:context=".line_of_business.LineOfBusinessScreen">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="8dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/back_ic"
-            app:tint="@color/themeColor"
-            android:id="@+id/backBtn"
-            android:layout_margin="8dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Products"
-            android:textStyle="bold"
-            android:textSize="22dp"
-            android:padding="8dp"/>
-
-    </LinearLayout>
-
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="8dp"
         app:cardElevation="5dp"
-        android:layout_marginVertical="8dp"
-        android:layout_marginHorizontal="16dp">
+        android:layout_margin="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,7 +41,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <include android:id="@+id/loadingView" layout="@layout/list_item_line_of_business_loading"/>
+    <include android:id="@+id/loadingView" layout="@layout/list_item_product_loading"/>
 
     <ListView
         android:layout_width="match_parent"
@@ -75,8 +49,28 @@
         android:divider="@null"
         android:choiceMode="none"
         android:dividerHeight="0dp"
+        android:layout_weight="1"
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
         android:id="@+id/productsView"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/nextBtn"
+        android:visibility="gone"
+        android:background="@color/themeColor"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Next"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
 
 </LinearLayout>

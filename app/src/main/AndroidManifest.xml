@@ -16,8 +16,16 @@
         android:theme="@style/BlackIconsStatusBarTheme"
         tools:targetApi="31">
         <activity
-            android:name=".products.ProductsScreen"
+            android:name=".custom_forms.CustomForms"
             android:exported="false" />
+        <activity
+            android:name=".user_information.UserInformationScreen"
+            android:exported="false"
+            android:theme="@style/BlackIconsStatusBarTheme" />
+        <activity
+            android:name=".products.ProductsScreen"
+            android:exported="false"
+            android:theme="@style/BlackIconsStatusBarTheme" />
         <activity
             android:name=".line_of_business.LineOfBusinessScreen"
             android:exported="false"

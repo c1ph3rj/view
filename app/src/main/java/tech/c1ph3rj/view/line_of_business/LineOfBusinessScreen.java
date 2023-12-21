@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -48,13 +51,29 @@ public class LineOfBusinessScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_line_of_business_screen);
 
+        try {
+            ActionBar actionBar = getSupportActionBar();
+            if(actionBar != null) {
+                actionBar.setTitle("Line Of Business");
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setHomeButtonEnabled(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         services = new Services(this);
         init();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        getOnBackPressedDispatcher().onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
+
     void init() {
         try {
-            backBtn = findViewById(R.id.backBtn);
             lineOfBusinessView = findViewById(R.id.lineOfBusinessView);
             searchView = findViewById(R.id.searchView);
             loadingView = findViewById(R.id.loadingView);
@@ -75,8 +94,6 @@ public class LineOfBusinessScreen extends AppCompatActivity {
 
             loadingView.setVisibility(View.GONE);
             startLoading();
-
-            backBtn.setOnClickListener(onClickBack -> getOnBackPressedDispatcher().onBackPressed());
 
             getAllLineOffBusinessAPI();
 

@@ -2,6 +2,7 @@ package tech.c1ph3rj.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
+import android.view.Window;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -17,6 +19,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
@@ -28,8 +31,324 @@ import okhttp3.Response;
 public class Services {
     Context context;
     Activity activity;
+    public static String response = "{\n" +
+            "  \"rcode\": 200,\n" +
+            "  \"rObj\": {\n" +
+            "    \"productIDs\": [\n" +
+            "      327,\n" +
+            "      123\n" +
+            "    ],\n" +
+            "    \"getAllAPIFormaly\": [\n" +
+            "      {\n" +
+            "        \"fieldGroup\": [\n" +
+            "          {\n" +
+            "            \"key\": \"VehicleTypeID\",\n" +
+            "            \"type\": \"select\",\n" +
+            "            \"templateOptions\": {\n" +
+            "              \"label\": \"Vehicle Type\",\n" +
+            "              \"rows\": 1,\n" +
+            "              \"required\": true,\n" +
+            "              \"disabled\": null,\n" +
+            "              \"pattern\": null,\n" +
+            "              \"options\": [],\n" +
+            "              \"isOnloadAPICall\": false,\n" +
+            "              \"placeholder\": null,\n" +
+            "              \"valueProp\": \"masterDataID\",\n" +
+            "              \"labelProp\": \"mdTitle\",\n" +
+            "              \"type\": \"select\",\n" +
+            "              \"multiple\": null,\n" +
+            "              \"selectAllOption\": null,\n" +
+            "              \"cascadingParentControl\": \"UsageTypeID\",\n" +
+            "              \"apiUrl\": \"api/digital/core/MasterData/FetchMasterData\",\n" +
+            "              \"rObjData\": \"rObj.fetchMasterData\",\n" +
+            "              \"inputParameter\": \"parentMasterDataID\"\n" +
+            "            },\n" +
+            "            \"validation\": {\n" +
+            "              \"messages\": {\n" +
+            "                \"required\": \"Vehicle Type is required\",\n" +
+            "                \"pattern\": null\n" +
+            "              }\n" +
+            "            },\n" +
+            "            \"hideExpression\": null,\n" +
+            "            \"orderData\": 1\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"key\": \"UsageTypeID\",\n" +
+            "            \"type\": \"select\",\n" +
+            "            \"templateOptions\": {\n" +
+            "              \"label\": \"Usage Type\",\n" +
+            "              \"rows\": 1,\n" +
+            "              \"required\": true,\n" +
+            "              \"disabled\": null,\n" +
+            "              \"pattern\": null,\n" +
+            "              \"options\": [],\n" +
+            "              \"isOnloadAPICall\": false,\n" +
+            "              \"placeholder\": \"Select\",\n" +
+            "              \"valueProp\": \"value\",\n" +
+            "              \"labelProp\": \"label\",\n" +
+            "              \"type\": \"select\",\n" +
+            "              \"multiple\": null,\n" +
+            "              \"selectAllOption\": null,\n" +
+            "              \"cascadingParentControl\": null,\n" +
+            "              \"apiUrl\": null,\n" +
+            "              \"rObjData\": null,\n" +
+            "              \"inputParameter\": null\n" +
+            "            },\n" +
+            "            \"validation\": {\n" +
+            "              \"messages\": {\n" +
+            "                \"required\": \"Usage Type is required\",\n" +
+            "                \"pattern\": null\n" +
+            "              }\n" +
+            "            },\n" +
+            "            \"hideExpression\": null,\n" +
+            "            \"orderData\": 2\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"key\": \"UsageSubTypeID\",\n" +
+            "            \"type\": \"select\",\n" +
+            "            \"templateOptions\": {\n" +
+            "              \"label\": \"Usage Sub Type\",\n" +
+            "              \"rows\": 1,\n" +
+            "              \"required\": true,\n" +
+            "              \"disabled\": null,\n" +
+            "              \"pattern\": null,\n" +
+            "              \"options\": [],\n" +
+            "              \"isOnloadAPICall\": false,\n" +
+            "              \"placeholder\": \"Select\",\n" +
+            "              \"valueProp\": \"value\",\n" +
+            "              \"labelProp\": \"label\",\n" +
+            "              \"type\": \"select\",\n" +
+            "              \"multiple\": null,\n" +
+            "              \"selectAllOption\": null,\n" +
+            "              \"cascadingParentControl\": null,\n" +
+            "              \"apiUrl\": null,\n" +
+            "              \"rObjData\": null,\n" +
+            "              \"inputParameter\": null\n" +
+            "            },\n" +
+            "            \"validation\": {\n" +
+            "              \"messages\": {\n" +
+            "                \"required\": \"Usage Sub Type is required\",\n" +
+            "                \"pattern\": null\n" +
+            "              }\n" +
+            "            },\n" +
+            "            \"hideExpression\": null,\n" +
+            "            \"orderData\": 3\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"key\": \"makeID\",\n" +
+            "            \"type\": \"select\",\n" +
+            "            \"templateOptions\": {\n" +
+            "              \"label\": \"Vehicle Make\",\n" +
+            "              \"rows\": 1,\n" +
+            "              \"required\": true,\n" +
+            "              \"disabled\": null,\n" +
+            "              \"pattern\": null,\n" +
+            "              \"options\": [\n" +
+            "                {\n" +
+            "                  \"label\": \"Make\",\n" +
+            "                  \"value\": \"a5d5e63f-bc03-4ab7-a7a5-78083e1f6b24\"\n" +
+            "                }\n" +
+            "              ],\n" +
+            "              \"isOnloadAPICall\": false,\n" +
+            "              \"placeholder\": \"Select\",\n" +
+            "              \"valueProp\": \"value\",\n" +
+            "              \"labelProp\": \"label\",\n" +
+            "              \"type\": \"select\",\n" +
+            "              \"multiple\": null,\n" +
+            "              \"selectAllOption\": null,\n" +
+            "              \"cascadingParentControl\": null,\n" +
+            "              \"apiUrl\": null,\n" +
+            "              \"rObjData\": null,\n" +
+            "              \"inputParameter\": null\n" +
+            "            },\n" +
+            "            \"validation\": {\n" +
+            "              \"messages\": {\n" +
+            "                \"required\": \"Vehicle Make is required\",\n" +
+            "                \"pattern\": null\n" +
+            "              }\n" +
+            "            },\n" +
+            "            \"hideExpression\": null,\n" +
+            "            \"orderData\": 4\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"key\": \"IDV\",\n" +
+            "            \"type\": \"input\",\n" +
+            "            \"templateOptions\": {\n" +
+            "              \"label\": \"IDV\",\n" +
+            "              \"rows\": 1,\n" +
+            "              \"required\": true,\n" +
+            "              \"disabled\": null,\n" +
+            "              \"pattern\": null,\n" +
+            "              \"options\": [],\n" +
+            "              \"isOnloadAPICall\": null,\n" +
+            "              \"placeholder\": null,\n" +
+            "              \"valueProp\": null,\n" +
+            "              \"labelProp\": null,\n" +
+            "              \"type\": \"text\",\n" +
+            "              \"multiple\": null,\n" +
+            "              \"selectAllOption\": null,\n" +
+            "              \"cascadingParentControl\": null,\n" +
+            "              \"apiUrl\": null,\n" +
+            "              \"rObjData\": null,\n" +
+            "              \"inputParameter\": null\n" +
+            "            },\n" +
+            "            \"validation\": {\n" +
+            "              \"messages\": {\n" +
+            "                \"required\": \"IDV is required\",\n" +
+            "                \"pattern\": null\n" +
+            "              }\n" +
+            "            },\n" +
+            "            \"hideExpression\": null,\n" +
+            "            \"orderData\": 5\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"key\": \"modelID\",\n" +
+            "            \"type\": \"select\",\n" +
+            "            \"templateOptions\": {\n" +
+            "              \"label\": \"Vehicle Model\",\n" +
+            "              \"rows\": 1,\n" +
+            "              \"required\": true,\n" +
+            "              \"disabled\": null,\n" +
+            "              \"pattern\": null,\n" +
+            "              \"options\": [\n" +
+            "                {\n" +
+            "                  \"label\": \"Make\",\n" +
+            "                  \"value\": \"a5d5e63f-bc03-4ab7-a7a5-78083e1f6b24\"\n" +
+            "                }\n" +
+            "              ],\n" +
+            "              \"isOnloadAPICall\": false,\n" +
+            "              \"placeholder\": \"Select\",\n" +
+            "              \"valueProp\": null,\n" +
+            "              \"labelProp\": null,\n" +
+            "              \"type\": \"select\",\n" +
+            "              \"multiple\": null,\n" +
+            "              \"selectAllOption\": null,\n" +
+            "              \"cascadingParentControl\": null,\n" +
+            "              \"apiUrl\": null,\n" +
+            "              \"rObjData\": null,\n" +
+            "              \"inputParameter\": null\n" +
+            "            },\n" +
+            "            \"validation\": {\n" +
+            "              \"messages\": {\n" +
+            "                \"required\": \"Vehicle Model is required\",\n" +
+            "                \"pattern\": null\n" +
+            "              }\n" +
+            "            },\n" +
+            "            \"hideExpression\": null,\n" +
+            "            \"orderData\": 6\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"key\": \"cubicCapacity\",\n" +
+            "            \"type\": \"input\",\n" +
+            "            \"templateOptions\": {\n" +
+            "              \"label\": \"Vehicle Cubic Capacity\",\n" +
+            "              \"rows\": 1,\n" +
+            "              \"required\": true,\n" +
+            "              \"disabled\": null,\n" +
+            "              \"pattern\": null,\n" +
+            "              \"options\": [],\n" +
+            "              \"isOnloadAPICall\": null,\n" +
+            "              \"placeholder\": null,\n" +
+            "              \"valueProp\": null,\n" +
+            "              \"labelProp\": null,\n" +
+            "              \"type\": \"text\",\n" +
+            "              \"multiple\": null,\n" +
+            "              \"selectAllOption\": null,\n" +
+            "              \"cascadingParentControl\": null,\n" +
+            "              \"apiUrl\": null,\n" +
+            "              \"rObjData\": null,\n" +
+            "              \"inputParameter\": null\n" +
+            "            },\n" +
+            "            \"validation\": {\n" +
+            "              \"messages\": {\n" +
+            "                \"required\": \"Vehicle Cubic Capacity is required\",\n" +
+            "                \"pattern\": null\n" +
+            "              }\n" +
+            "            },\n" +
+            "            \"hideExpression\": null,\n" +
+            "            \"orderData\": 7\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"key\": \"YearOfManufacture\",\n" +
+            "            \"type\": \"input\",\n" +
+            "            \"templateOptions\": {\n" +
+            "              \"label\": \"Year of Manufacture\",\n" +
+            "              \"rows\": 1,\n" +
+            "              \"required\": true,\n" +
+            "              \"disabled\": null,\n" +
+            "              \"pattern\": null,\n" +
+            "              \"options\": [],\n" +
+            "              \"isOnloadAPICall\": null,\n" +
+            "              \"placeholder\": null,\n" +
+            "              \"valueProp\": null,\n" +
+            "              \"labelProp\": null,\n" +
+            "              \"type\": \"text\",\n" +
+            "              \"multiple\": null,\n" +
+            "              \"selectAllOption\": null,\n" +
+            "              \"cascadingParentControl\": null,\n" +
+            "              \"apiUrl\": null,\n" +
+            "              \"rObjData\": null,\n" +
+            "              \"inputParameter\": null\n" +
+            "            },\n" +
+            "            \"validation\": {\n" +
+            "              \"messages\": {\n" +
+            "                \"required\": \"Vehicle Age is required\",\n" +
+            "                \"pattern\": null\n" +
+            "              }\n" +
+            "            },\n" +
+            "            \"hideExpression\": null,\n" +
+            "            \"orderData\": 8\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"key\": \"AddOns\",\n" +
+            "            \"type\": \"select\",\n" +
+            "            \"templateOptions\": {\n" +
+            "              \"label\": \"AddOn\",\n" +
+            "              \"rows\": null,\n" +
+            "              \"required\": false,\n" +
+            "              \"disabled\": false,\n" +
+            "              \"pattern\": null,\n" +
+            "              \"options\": [],\n" +
+            "              \"isOnloadAPICall\": null,\n" +
+            "              \"placeholder\": \"Select\",\n" +
+            "              \"valueProp\": \"value\",\n" +
+            "              \"labelProp\": \"label\",\n" +
+            "              \"type\": null,\n" +
+            "              \"multiple\": true,\n" +
+            "              \"selectAllOption\": \"Select All\",\n" +
+            "              \"cascadingParentControl\": null,\n" +
+            "              \"apiUrl\": null,\n" +
+            "              \"rObjData\": null,\n" +
+            "              \"inputParameter\": null\n" +
+            "            },\n" +
+            "            \"validation\": {\n" +
+            "              \"messages\": null\n" +
+            "            },\n" +
+            "            \"hideExpression\": null,\n" +
+            "            \"orderData\": 9\n" +
+            "          }\n" +
+            "        ]\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  \"rmsg\": [\n" +
+            "    {\n" +
+            "      \"errorText\": \"Success\",\n" +
+            "      \"errorCode\": \"Success\",\n" +
+            "      \"fieldName\": null,\n" +
+            "      \"fieldValue\": null\n" +
+            "    }\n" +
+            "  ],\n" +
+            "  \"reqID\": \"4a038bbe-ab42-4fe4-aec2-4c7fd84d087d\",\n" +
+            "  \"objectDBID\": null,\n" +
+            "  \"transactionRef\": null,\n" +
+            "  \"outcome\": true,\n" +
+            "  \"outcomeMsgCode\": \"Success\",\n" +
+            "  \"reDirectURL\": null\n" +
+            "}";
+    public static String token = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiI4YmI1NDE4YWYzYjQ0YjdiOTI2OGM3YjRhYTg1NTYzMiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.HZiyeSpf2DOM8T8-i3UK1KuFqC-D9zIOdR1hgcm5V93zxGY8ZlZvhtUKTkGIGrHZ185_DW6WPOiZOVS9iaikp2I0-9rofJncHZAQz2kjzy4MCPaJOLHgHepxPpiql_Tohr75zizA0mxupiRYmQ2MC9lwtX3Qo1N9c-EuA_vFkSm7eVerD68RPDMe24_x8TXQsVeWjwV1z3yl4iRwFY4WOlti5Iist3XIB8D0A_gGJ9-WyvX-LnrQqum_569C3X2c8qkIDPAH15ZDLwWIjZL7ecrET99gaTqg-FLUYMHZXygkez2fIA1E23atsh_6zHm82fv7nWzmDH2ZcHoxDHZ6Qg.aXJ9Jlco0I674s5_HcvXbA.PRCSvyQB9onD_mHHpXCGMiAVjriUl5gcLASnOEBR0Jj_uJIaNAkDn7ISrMjwjvZYRRd8Vz2huKiJbXuHp-UeXw18HeMXSP5WaTier3clTnODgHeG-GdJ5Xg-a76d9m2rqUtYxRdmtaebHOgeU7MPQLnknHL2SNYrHfbb92fAfRg95TFYDmvV8Qpff5pmRVG3WyH-72wIXa6FviNoSoYiImofBy4U-7r98REye2suhYUkrM4k40dkCRVdc4UXm0Ydvt75l6hLIlhYdkebgViwuKQZhKR6auZMwlZb7ZfiY5-wwu__lDjk9MKfzcRcoWbSFVusQlO8w5mMKo-90gc8IGbpRl3uOWA6PC6Rg_fcJS5qGBTbM9i-STiQnSf5SDli6_scpN_kTCZE8-FYxtexXpgvSBMYxidYiB1UV9P1wm_uIDts2bpjoEzeEPes9HedjtV6v7w0IoYcMb9w_GGriuVbrcibPc-UllHlujB0ljmBVnhkofPURVubXn68-kSikZX1g1k7fpRuHp5ZdWqlr7OmzwuS-MBDRzFCUtfA4DHAdDM8ORvJmqsLgxwTYV0lIdthB8oC9aMSduIAvU0h8Xviy_YH_9pzSxSmmYHlm91m3Xn8n7_vXGv8N_dxT5Tb7cjgPPbGDyuNpCbxM5PDXVGJAv1eafjB4bxs74ziglxHGUQX89HnlLFww_he-9YJn1Sj9pOJWylCSPhCyuvMBACXsskwCMstzSTiBumouWvod48TR9dOKZnsapO4gvX2BLdzb4y1QUD7yW6P_EXaGa85zadwocZShe2Linf8zp4-9vQlGBCKGEyiHRND2B5dFhB8B-UUbQqGUKNC4UJVNl7Z3lp3w6HJefX0WBg6d3jE-9LlfpdBRdIp-ODyxtL_c0ZiD0zMtsUJtPrCDRWfYGofELa3sMMtBGqszKBky717FImqo9s3Uyp1LpgJcj8OfutLj8SbvBUNq2D6Tzdx2My21PIvRHS58ASXIxCYsM-50Rn_aWwRnorxQ8Z5CttvAsl41LUcridXRBG2xy8emS4t1F5riI1QA5VGy_i8a2VsufX1zNgNVxJQ-0Dp5HSrdCaH7l1QJT8dMM1PSQXrv0TUYN9hKiwhtog_Qr6TPgGtDuf1HAMdBXo2VRhXGFrVszVXgPE7LUmRQMhxa0xFhOoHdR4rfUcl9eSjzZtmYBGqZj42beerrFjrey8QLsJcmcY--mcp6fYlN-4folobmCPjeKPQ_LjvpIApHQ9-n1g47HbSDiJSBNU9LLoU6VENRm7xo7J4nr8CNJp7835QaUTDnnYKSF2Lpow279LXNhmdWvRzCEAzX4hAyvoWic2KlVM6kWuAbJ-udgKYtJGUc08ugtQw_E6Oje-QcX2xvcZtIEILt7wKlwcddu9_ZaFFl0xROCQBSkPwy9bqggx2rg.GJsoKV-tTAod-tiUsYzRT2PZszL7jxRrtJn3ZLnIx90";
     public String baseUrl;
-    public static String token = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiI4YmI1NDE4YWYzYjQ0YjdiOTI2OGM3YjRhYTg1NTYzMiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.O5pbBbpq4KTq-TwC2u3Rxkf3f7KnH46lZ4lbOsObNL459yxVcJw4Qc0vyehQwwsXSOlYlKr8SHVHbay9xRhl_D2j-dfKNicv0NuUGWoEF02iqg2u1EQW2cwxZm7WWku5mPLvyNz9Nj1poA7a-aOpNt-nDEGYsh_HlgODEW05-N6CPpVTYct0ax_XnNQgoxRg5YBKQDHg1qbelw-oGwxqTtfKnIFjaHndXu1fTehgMSAtLLojm5WZCmIUszQoxva_xgJexmPNb65NT9iZjaGn5vqInEKD-c-hZvPXmJ17H_M5SCHCry9pBlpl6EXRqnS8XrBjHmEy9pYyjdzevI4c9A.N-oprwC-vK02zRUjBmasyg.sgY7aQnW259b9xSeDNyMr1VRrfiHtQL8JNbMqzV78vu6uXF27Mgw5MGqR_WAXlYbBvJaIKZcYDD1J-1chXcf5RCikMowfR7Tn1GkOxkxqB7TsOdhdTp9dz4J6zmOCvkjbMhLgm7f-Ftx7TCIHRcV2EaenlBMZyY4VCtveqwz5CNavJDGE5aM_c6DN4XaQ17CDH18jUeXBZ7GNbySoYDZtN-0dnmrpHKqRtl2Ryx-3VxfQcjYCPQA1qEneW1VZekBUEXZyFD8gc2Yu59SFiRDhl0aJTECsrV_0ibCe3XhjTwY79PPThHN4g9O6Fa9LkaUjaBkGDRuH3m2W2EEDZfBWV-hsy09h2PHlsTlRnA3sZ_E2L-d1ugVotBtEFWOu6HHL3DReeniRkEdeMER1OktlzueckkkoN7qnGZ-7tBP6IoIaAU2BzaMDa7KqyUG1D5jJtU3Z6kN3RNALOC_CWxAxjqtyXG9W8u42IJqhrWv3tGIvrFZJHG2f1UFr-DApKmZk20Sj6DhwGcilI77SJ_1fgoHDRYStTo-IdjBGfOakaiwDZgRtq7EIJa8GH3SpyoXPaeBlfzLshynIvHb-fEvH2CMQo1iD2Cl7NHpt-BS77xCS8vPzTRnhfYn7M2x77oA37-ihQqcv_fcOkK0xvLYLyAZ350exmSTxaeaPOQRI_EGSbn4tg4zh0U0D5PlZdJu9TE_dntgqd4clgkllo1qocycvWcnhoTfpTu8pEmGxQw3R_5_kHI3F-NU3jdxHpA9H-yq9ph8P7lDjwf6-9X7B23DEYXJsRWGmTiPXtENB7BBdLJDX230KmXjkqSOWQrl1e4xUKk4qnUcUtDYZZxQjFQoi8TTDSOlXki9hnC366Lw1q8C_tpiQuWgKr8T60XQcC57ad8U-l-auRTFvrj1JV1RLJv94H9Jp7txy2oRH7l1yvu2W_mUsG1_JE58xDegMwICOY3uW-aXYiLwjwwiGsDDtMMwJdPG5MAgJM92Jym4HbZ-Bi6aPBCvixU3pC-MYlaUOM98SNfGjV46KLlotVK1muxa8nGSWjATFKD1x77zbD0e1pyMGtjndg3Ly_lzNtQHJD0uxo-Aj194Qb60UxPN2c97OZDqIuM1xVo3iNJvDEE7NjGHcwU2WzN-TvxYoCoWl9u8lYE_XIKekr-y69yhbj-9sSZVKnQn20FFy4tC36dQ5npj18jf_gbR5RUNL92mLfyXVvgO4HadlW8HLXHnwHBFv9RiQR_7sclj79VlGTzBRg9q0BZqnM7eiLcF-tdB49RJ0Jm2PwqmUSnDIkJSuhYvnKjyLay4FwJd_hjj8IookNaogobc5j6YdwriX0TebTjUa-20UPsDvFS_DxCisOx5R8cP8DV9hRSdFovi-nsI4RzTFpMousyUD4s91xJCcXe6mibLOL507yzYww.hZ9waX0zaiHkyVjGHTSnmAAwnkPGFmxyyUwG_JkrdZk";
+    public Dialog loader;
     public static final MediaType JSON = MediaType.get("application/json");
     public static OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(120, TimeUnit.SECONDS)
@@ -41,6 +360,33 @@ public class Services {
         this.context = context;
         activity = (Activity)context;
         baseUrl = activity.getString(R.string.base_url);
+        loader = initLoaderDialog();
+    }
+
+    public void showDialog() {
+        activity.runOnUiThread(()->{
+            if (loader != null && !loader.isShowing()) {
+                loader.show();
+            }
+        });
+    }
+
+    // You can add more methods as needed, such as dismissing the dialog
+    public void dismissDialog() {
+        activity.runOnUiThread(()-> {
+            if (loader != null && loader.isShowing()) {
+                loader.dismiss();
+            }
+        });
+    }
+
+    public Dialog initLoaderDialog() {
+        Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.loading_view);
+        dialog.setCancelable(false);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        return dialog;
     }
 
     public static String post(String url, String json) throws IOException {
