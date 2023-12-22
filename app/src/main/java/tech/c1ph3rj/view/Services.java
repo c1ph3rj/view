@@ -35,37 +35,45 @@ public class Services {
             "  \"rcode\": 200,\n" +
             "  \"rObj\": {\n" +
             "    \"productIDs\": [\n" +
-            "      327,\n" +
-            "      123\n" +
+            "      520\n" +
             "    ],\n" +
             "    \"getAllAPIFormaly\": [\n" +
             "      {\n" +
             "        \"fieldGroup\": [\n" +
             "          {\n" +
-            "            \"key\": \"VehicleTypeID\",\n" +
+            "            \"key\": \"Gender\",\n" +
             "            \"type\": \"select\",\n" +
             "            \"templateOptions\": {\n" +
-            "              \"label\": \"Vehicle Type\",\n" +
+            "              \"label\": \"Gender\",\n" +
             "              \"rows\": 1,\n" +
             "              \"required\": true,\n" +
             "              \"disabled\": null,\n" +
             "              \"pattern\": null,\n" +
-            "              \"options\": [],\n" +
+            "              \"options\": [\n" +
+            "                {\n" +
+            "                  \"label\": \"Female\",\n" +
+            "                  \"value\": \"cf632196-f295-412e-80eb-9e94fd351443\"\n" +
+            "                },\n" +
+            "                {\n" +
+            "                  \"label\": \"Male\",\n" +
+            "                  \"value\": \"cf632196-f295-412e-80eb-9e94fd351442\"\n" +
+            "                }\n" +
+            "              ],\n" +
             "              \"isOnloadAPICall\": false,\n" +
-            "              \"placeholder\": null,\n" +
-            "              \"valueProp\": \"masterDataID\",\n" +
-            "              \"labelProp\": \"mdTitle\",\n" +
+            "              \"placeholder\": \"Select\",\n" +
+            "              \"valueProp\": \"value\",\n" +
+            "              \"labelProp\": \"label\",\n" +
             "              \"type\": \"select\",\n" +
             "              \"multiple\": null,\n" +
             "              \"selectAllOption\": null,\n" +
-            "              \"cascadingParentControl\": \"UsageTypeID\",\n" +
-            "              \"apiUrl\": \"api/digital/core/MasterData/FetchMasterData\",\n" +
-            "              \"rObjData\": \"rObj.fetchMasterData\",\n" +
-            "              \"inputParameter\": \"parentMasterDataID\"\n" +
+            "              \"cascadingParentControl\": null,\n" +
+            "              \"apiUrl\": null,\n" +
+            "              \"rObjData\": null,\n" +
+            "              \"inputParameter\": null\n" +
             "            },\n" +
             "            \"validation\": {\n" +
             "              \"messages\": {\n" +
-            "                \"required\": \"Vehicle Type is required\",\n" +
+            "                \"required\": \"Gender is required\",\n" +
             "                \"pattern\": null\n" +
             "              }\n" +
             "            },\n" +
@@ -73,15 +81,24 @@ public class Services {
             "            \"orderData\": 1\n" +
             "          },\n" +
             "          {\n" +
-            "            \"key\": \"UsageTypeID\",\n" +
+            "            \"key\": \"IsSmoker\",\n" +
             "            \"type\": \"select\",\n" +
             "            \"templateOptions\": {\n" +
-            "              \"label\": \"Usage Type\",\n" +
+            "              \"label\": \"Smoker\",\n" +
             "              \"rows\": 1,\n" +
             "              \"required\": true,\n" +
             "              \"disabled\": null,\n" +
             "              \"pattern\": null,\n" +
-            "              \"options\": [],\n" +
+            "              \"options\": [\n" +
+            "                {\n" +
+            "                  \"label\": \"Yes\",\n" +
+            "                  \"value\": \"70c1d4e7-b21e-491e-bcf0-3c364ec16b4d\"\n" +
+            "                },\n" +
+            "                {\n" +
+            "                  \"label\": \"No\",\n" +
+            "                  \"value\": \"3a1233ac-1c5b-4b35-9ce6-202fdc9434eb\"\n" +
+            "                }\n" +
+            "              ],\n" +
             "              \"isOnloadAPICall\": false,\n" +
             "              \"placeholder\": \"Select\",\n" +
             "              \"valueProp\": \"value\",\n" +
@@ -96,7 +113,7 @@ public class Services {
             "            },\n" +
             "            \"validation\": {\n" +
             "              \"messages\": {\n" +
-            "                \"required\": \"Usage Type is required\",\n" +
+            "                \"required\": \"Smoker is required\",\n" +
             "                \"pattern\": null\n" +
             "              }\n" +
             "            },\n" +
@@ -104,21 +121,38 @@ public class Services {
             "            \"orderData\": 2\n" +
             "          },\n" +
             "          {\n" +
-            "            \"key\": \"UsageSubTypeID\",\n" +
+            "            \"key\": \"PaymentPeriodID\",\n" +
             "            \"type\": \"select\",\n" +
             "            \"templateOptions\": {\n" +
-            "              \"label\": \"Usage Sub Type\",\n" +
+            "              \"label\": \"Payment Frequency\",\n" +
             "              \"rows\": 1,\n" +
             "              \"required\": true,\n" +
             "              \"disabled\": null,\n" +
             "              \"pattern\": null,\n" +
-            "              \"options\": [],\n" +
+            "              \"options\": [\n" +
+            "                {\n" +
+            "                  \"label\": \"Monthly\",\n" +
+            "                  \"value\": \"80984271-f1a0-4fee-ae3a-5ac72863c7d1\"\n" +
+            "                },\n" +
+            "                {\n" +
+            "                  \"label\": \"Quarterly\",\n" +
+            "                  \"value\": \"45d018d0-a40f-4dfc-a654-983575d1a5b0\"\n" +
+            "                },\n" +
+            "                {\n" +
+            "                  \"label\": \"Semi-Annual\",\n" +
+            "                  \"value\": \"2d42056b-04f7-45e5-aa0f-d3f430d27d10\"\n" +
+            "                },\n" +
+            "                {\n" +
+            "                  \"label\": \"Annual\",\n" +
+            "                  \"value\": \"88aed3b5-0ed6-4ce1-81f6-e50d208ac450\"\n" +
+            "                }\n" +
+            "              ],\n" +
             "              \"isOnloadAPICall\": false,\n" +
             "              \"placeholder\": \"Select\",\n" +
             "              \"valueProp\": \"value\",\n" +
             "              \"labelProp\": \"label\",\n" +
             "              \"type\": \"select\",\n" +
-            "              \"multiple\": null,\n" +
+            "              \"multiple\": true,\n" +
             "              \"selectAllOption\": null,\n" +
             "              \"cascadingParentControl\": null,\n" +
             "              \"apiUrl\": null,\n" +
@@ -127,7 +161,7 @@ public class Services {
             "            },\n" +
             "            \"validation\": {\n" +
             "              \"messages\": {\n" +
-            "                \"required\": \"Usage Sub Type is required\",\n" +
+            "                \"required\": \"Payment Frequency is required\",\n" +
             "                \"pattern\": null\n" +
             "              }\n" +
             "            },\n" +
@@ -135,25 +169,20 @@ public class Services {
             "            \"orderData\": 3\n" +
             "          },\n" +
             "          {\n" +
-            "            \"key\": \"makeID\",\n" +
-            "            \"type\": \"select\",\n" +
+            "            \"key\": \"Term\",\n" +
+            "            \"type\": \"input\",\n" +
             "            \"templateOptions\": {\n" +
-            "              \"label\": \"Vehicle Make\",\n" +
+            "              \"label\": \"Term\",\n" +
             "              \"rows\": 1,\n" +
             "              \"required\": true,\n" +
             "              \"disabled\": null,\n" +
             "              \"pattern\": null,\n" +
-            "              \"options\": [\n" +
-            "                {\n" +
-            "                  \"label\": \"Make\",\n" +
-            "                  \"value\": \"a5d5e63f-bc03-4ab7-a7a5-78083e1f6b24\"\n" +
-            "                }\n" +
-            "              ],\n" +
-            "              \"isOnloadAPICall\": false,\n" +
-            "              \"placeholder\": \"Select\",\n" +
-            "              \"valueProp\": \"value\",\n" +
-            "              \"labelProp\": \"label\",\n" +
-            "              \"type\": \"select\",\n" +
+            "              \"options\": [],\n" +
+            "              \"isOnloadAPICall\": null,\n" +
+            "              \"placeholder\": null,\n" +
+            "              \"valueProp\": null,\n" +
+            "              \"labelProp\": null,\n" +
+            "              \"type\": \"text\",\n" +
             "              \"multiple\": null,\n" +
             "              \"selectAllOption\": null,\n" +
             "              \"cascadingParentControl\": null,\n" +
@@ -163,7 +192,7 @@ public class Services {
             "            },\n" +
             "            \"validation\": {\n" +
             "              \"messages\": {\n" +
-            "                \"required\": \"Vehicle Make is required\",\n" +
+            "                \"required\": \"Term is required\",\n" +
             "                \"pattern\": null\n" +
             "              }\n" +
             "            },\n" +
@@ -171,10 +200,10 @@ public class Services {
             "            \"orderData\": 4\n" +
             "          },\n" +
             "          {\n" +
-            "            \"key\": \"IDV\",\n" +
+            "            \"key\": \"DateOfBirth\",\n" +
             "            \"type\": \"input\",\n" +
             "            \"templateOptions\": {\n" +
-            "              \"label\": \"IDV\",\n" +
+            "              \"label\": \"Date Of Birth\",\n" +
             "              \"rows\": 1,\n" +
             "              \"required\": true,\n" +
             "              \"disabled\": null,\n" +
@@ -184,7 +213,7 @@ public class Services {
             "              \"placeholder\": null,\n" +
             "              \"valueProp\": null,\n" +
             "              \"labelProp\": null,\n" +
-            "              \"type\": \"text\",\n" +
+            "              \"type\": \"date\",\n" +
             "              \"multiple\": null,\n" +
             "              \"selectAllOption\": null,\n" +
             "              \"cascadingParentControl\": null,\n" +
@@ -194,7 +223,7 @@ public class Services {
             "            },\n" +
             "            \"validation\": {\n" +
             "              \"messages\": {\n" +
-            "                \"required\": \"IDV is required\",\n" +
+            "                \"required\": \"Date Of Birth is required\",\n" +
             "                \"pattern\": null\n" +
             "              }\n" +
             "            },\n" +
@@ -202,25 +231,20 @@ public class Services {
             "            \"orderData\": 5\n" +
             "          },\n" +
             "          {\n" +
-            "            \"key\": \"modelID\",\n" +
-            "            \"type\": \"select\",\n" +
+            "            \"key\": \"SumInsured\",\n" +
+            "            \"type\": \"input\",\n" +
             "            \"templateOptions\": {\n" +
-            "              \"label\": \"Vehicle Model\",\n" +
+            "              \"label\": \"SumInsured\",\n" +
             "              \"rows\": 1,\n" +
             "              \"required\": true,\n" +
             "              \"disabled\": null,\n" +
             "              \"pattern\": null,\n" +
-            "              \"options\": [\n" +
-            "                {\n" +
-            "                  \"label\": \"Make\",\n" +
-            "                  \"value\": \"a5d5e63f-bc03-4ab7-a7a5-78083e1f6b24\"\n" +
-            "                }\n" +
-            "              ],\n" +
-            "              \"isOnloadAPICall\": false,\n" +
-            "              \"placeholder\": \"Select\",\n" +
+            "              \"options\": [],\n" +
+            "              \"isOnloadAPICall\": null,\n" +
+            "              \"placeholder\": null,\n" +
             "              \"valueProp\": null,\n" +
             "              \"labelProp\": null,\n" +
-            "              \"type\": \"select\",\n" +
+            "              \"type\": \"text\",\n" +
             "              \"multiple\": null,\n" +
             "              \"selectAllOption\": null,\n" +
             "              \"cascadingParentControl\": null,\n" +
@@ -230,74 +254,12 @@ public class Services {
             "            },\n" +
             "            \"validation\": {\n" +
             "              \"messages\": {\n" +
-            "                \"required\": \"Vehicle Model is required\",\n" +
+            "                \"required\": \"SumInsured is required\",\n" +
             "                \"pattern\": null\n" +
             "              }\n" +
             "            },\n" +
             "            \"hideExpression\": null,\n" +
             "            \"orderData\": 6\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"key\": \"cubicCapacity\",\n" +
-            "            \"type\": \"input\",\n" +
-            "            \"templateOptions\": {\n" +
-            "              \"label\": \"Vehicle Cubic Capacity\",\n" +
-            "              \"rows\": 1,\n" +
-            "              \"required\": true,\n" +
-            "              \"disabled\": null,\n" +
-            "              \"pattern\": null,\n" +
-            "              \"options\": [],\n" +
-            "              \"isOnloadAPICall\": null,\n" +
-            "              \"placeholder\": null,\n" +
-            "              \"valueProp\": null,\n" +
-            "              \"labelProp\": null,\n" +
-            "              \"type\": \"text\",\n" +
-            "              \"multiple\": null,\n" +
-            "              \"selectAllOption\": null,\n" +
-            "              \"cascadingParentControl\": null,\n" +
-            "              \"apiUrl\": null,\n" +
-            "              \"rObjData\": null,\n" +
-            "              \"inputParameter\": null\n" +
-            "            },\n" +
-            "            \"validation\": {\n" +
-            "              \"messages\": {\n" +
-            "                \"required\": \"Vehicle Cubic Capacity is required\",\n" +
-            "                \"pattern\": null\n" +
-            "              }\n" +
-            "            },\n" +
-            "            \"hideExpression\": null,\n" +
-            "            \"orderData\": 7\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"key\": \"YearOfManufacture\",\n" +
-            "            \"type\": \"input\",\n" +
-            "            \"templateOptions\": {\n" +
-            "              \"label\": \"Year of Manufacture\",\n" +
-            "              \"rows\": 1,\n" +
-            "              \"required\": true,\n" +
-            "              \"disabled\": null,\n" +
-            "              \"pattern\": null,\n" +
-            "              \"options\": [],\n" +
-            "              \"isOnloadAPICall\": null,\n" +
-            "              \"placeholder\": null,\n" +
-            "              \"valueProp\": null,\n" +
-            "              \"labelProp\": null,\n" +
-            "              \"type\": \"text\",\n" +
-            "              \"multiple\": null,\n" +
-            "              \"selectAllOption\": null,\n" +
-            "              \"cascadingParentControl\": null,\n" +
-            "              \"apiUrl\": null,\n" +
-            "              \"rObjData\": null,\n" +
-            "              \"inputParameter\": null\n" +
-            "            },\n" +
-            "            \"validation\": {\n" +
-            "              \"messages\": {\n" +
-            "                \"required\": \"Vehicle Age is required\",\n" +
-            "                \"pattern\": null\n" +
-            "              }\n" +
-            "            },\n" +
-            "            \"hideExpression\": null,\n" +
-            "            \"orderData\": 8\n" +
             "          },\n" +
             "          {\n" +
             "            \"key\": \"AddOns\",\n" +
@@ -325,11 +287,28 @@ public class Services {
             "              \"messages\": null\n" +
             "            },\n" +
             "            \"hideExpression\": null,\n" +
-            "            \"orderData\": 9\n" +
+            "            \"orderData\": 7\n" +
             "          }\n" +
             "        ]\n" +
             "      }\n" +
-            "    ]\n" +
+            "    ],\n" +
+            "    \"getQuotationSearch\": {\n" +
+            "      \"quotationSearchID\": \"1b2962d4-6567-4490-bcb3-2762e56c7b07\",\n" +
+            "      \"quotationID\": \"AA-AA10001\",\n" +
+            "      \"paymentTypeID\": 0,\n" +
+            "      \"ridersJson\": null,\n" +
+            "      \"coverTypeJson\": null,\n" +
+            "      \"orgGroupJson\": null,\n" +
+            "      \"inputJson\": null,\n" +
+            "      \"productJson\": \"[520]\",\n" +
+            "      \"premiumCategoryJson\": null,\n" +
+            "      \"requestTotalProduct\": 0,\n" +
+            "      \"createdOn\": \"2023-12-22T05:28:45.803\",\n" +
+            "      \"createdBy\": \"00000000-0000-0000-0000-000000000000\",\n" +
+            "      \"modifyOn\": \"2023-12-22T05:28:45.803\",\n" +
+            "      \"modifyBy\": \"00000000-0000-0000-0000-000000000000\",\n" +
+            "      \"isActive\": true\n" +
+            "    }\n" +
             "  },\n" +
             "  \"rmsg\": [\n" +
             "    {\n" +
@@ -339,7 +318,7 @@ public class Services {
             "      \"fieldValue\": null\n" +
             "    }\n" +
             "  ],\n" +
-            "  \"reqID\": \"4a038bbe-ab42-4fe4-aec2-4c7fd84d087d\",\n" +
+            "  \"reqID\": \"bcfd7d13-b497-4d6f-8a69-e73620534e20\",\n" +
             "  \"objectDBID\": null,\n" +
             "  \"transactionRef\": null,\n" +
             "  \"outcome\": true,\n" +

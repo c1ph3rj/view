@@ -2,4 +2,9 @@
     <string name="app_name">view</string>
     <string name="selected_page">%s page is selected!</string>
     <string name="base_url">https://primez-uat-api.azurewebsites.net/</string>
+
+    <string-array name="entities">
+        <item>Hello World</item>
+        <item>Hello There</item>
+    </string-array>
 </resources>

@@ -13,12 +13,25 @@
         android:textSize="16sp"
         android:layout_marginBottom="8dp"/>
 
-    <Spinner
-        android:id="@+id/spinnerInput"
+    <tech.c1ph3rj.view.custom_forms.MultiSpinner
+        android:id="@+id/multiSelectSpinnerView"
         android:layout_width="match_parent"
-        android:backgroundTint="@color/greyLight"
-        android:background="@drawable/card_background"
-        android:layout_height="50dp"
-        android:paddingHorizontal="8dp"/>
+        android:background="@drawable/drop_down_background"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:paddingEnd="25dp"
+        android:paddingVertical="8dp"
+        android:entries="@array/entities"
+        android:paddingStart="8dp"/>
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:id="@+id/spinnerView"
+        android:paddingEnd="25dp"
+        android:paddingVertical="8dp"
+        android:paddingStart="8dp"
+        android:background="@drawable/drop_down_background"/>
 
 </LinearLayout>

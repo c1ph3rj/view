@@ -3,12 +3,26 @@
     <style name="Base.Theme.View" parent="Theme.Material3.Light">
         <item name="colorPrimary">@color/themeColor</item>
         <item name="colorOnSurface">@color/white</item>
-        <item name="colorOnPrimary">@color/white</item>
         <item name="colorSurface">@color/themeColor</item>
-        <item name="android:textColorPrimary">@color/white</item>
+
+        <item name="android:datePickerDialogTheme">@style/MyDatePickerStyle</item>
+
     </style>
 
+    <style name="MyDatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/themeColor</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/AppTheme.Alert.Button.Positive</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/AppTheme.Alert.Button.Negative</item>
+    </style>
 
+    <style name="AppTheme.Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/themeColor</item>
+    </style>
+
+    <style name="AppTheme.Alert.Button.Negative" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/themeColor</item>
+    </style>
 
     <style name="Theme.View" parent="Base.Theme.View" />
 

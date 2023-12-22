@@ -1,24 +1,60 @@
 package tech.c1ph3rj.view.custom_forms;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class FormField {
+    private String key;
     private String label;
     private String type;
     private int order;
     private boolean isMultiple;
     private String placeholder;
-    private List<String> options; // Assuming options for select-type fields
+    private String templateType;
+    private boolean isSelectAllEnabled;
+    private List<Options> options;
+
+    public List<String> getOptionLabels() {
+        return optionLabels;
+    }
+
+    public void setOptionLabels(List<String> optionLabels) {
+        this.optionLabels = optionLabels;
+    }
+
+    private List<String> optionLabels;
+    private String value;
 
     // Constructor
-    public FormField(String label, String type, int order, boolean isMultiple, String placeholder, List<String> options) {
+    public FormField(String key, String label, String type, String templateType, int order, boolean isMultiple, boolean isSelectAllEnabled,  String placeholder, List<Options> options) {
+        this.key = key;
         this.label = label;
         this.type = type;
+        this.templateType = templateType;
         this.order = order;
         this.isMultiple = isMultiple;
+        this.isSelectAllEnabled = isSelectAllEnabled;
         this.placeholder = placeholder;
-        this.options = options;
+        optionLabels = new ArrayList<>();
+        try {
+            if (!isMultiple) {
+                optionLabels.add("select");
+            }
+            this.options = options;
+            for(Options eachOption : options) {
+                optionLabels.add(eachOption.label);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.value = "";
+    }
+
+    public static class Options {
+        String label;
+        String id;
+        boolean isSelected;
     }
 
     // Getters and Setters
@@ -62,11 +98,11 @@ public class FormField {
         this.placeholder = placeholder;
     }
 
-    public List<String> getOptions() {
+    public List<Options> getOptions() {
         return options;
     }
 
-    public void setOptions(List<String> options) {
+    public void setOptions(List<Options> options) {
         this.options = options;
     }
 
@@ -77,5 +113,37 @@ public class FormField {
             return Integer.compare(o1.getOrder(), o2.getOrder());
         }
     };
+
+    public String getTemplateType() {
+        return templateType;
+    }
+
+    public void setTemplateType(String templateType) {
+        this.templateType = templateType;
+    }
+
+    public boolean isSelectAllEnabled() {
+        return isSelectAllEnabled;
+    }
+
+    public void setSelectAllEnabled(boolean selectAllEnabled) {
+        isSelectAllEnabled = selectAllEnabled;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }
 
