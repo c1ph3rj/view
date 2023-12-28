@@ -2,20 +2,33 @@ package tech.c1ph3rj.view.custom_forms;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.text.Editable;
+import android.text.SpannableString;
+import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 
 import tech.c1ph3rj.view.R;
@@ -40,6 +53,8 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return R.layout.spinner_input_layout;
             case "date":
                 return R.layout.date_input_layout;
+            case "radio":
+                return R.layout.radio_button_layout;
         }
         return R.layout.empty_layout_view;
     }
@@ -55,6 +70,8 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             return new SpinnerViewHolder(view);
         } else if (viewType == R.layout.date_input_layout) {
             return new DateViewHolder(view);
+        } else if (viewType == R.layout.radio_button_layout) {
+            return new RadioButtonViewHolder(view);
         }
         return new EmptyViewHolder(view);
     }
@@ -69,6 +86,8 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((SpinnerViewHolder) holder).bind(field);
         } else if (holder instanceof DateViewHolder) {
             ((DateViewHolder) holder).bind(field);
+        } else if (holder instanceof RadioButtonViewHolder) {
+            ((RadioButtonViewHolder) holder).bind(field);
         }
         // Handle other cases...
     }
@@ -78,7 +97,6 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return formFields.size();
     }
 
-    // ViewHolder for text input
     public static class TextViewHolder extends RecyclerView.ViewHolder {
         private final TextView label;
         private final EditText editText;
@@ -91,11 +109,28 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         public void bind(FormField field) {
             label.setText(field.getLabel());
-            editText.setHint((!field.getValue().isEmpty()) ? field.getValue() : field.getPlaceholder());
+            setRequiredLabel(label, field.getLabel());
+            editText.setHint(field.getPlaceholder());
+            editText.setText((!field.getValue().isEmpty()) ? field.getValue() : "");
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    field.setValue(editable.toString().trim());
+                }
+            });
         }
     }
 
-    // ViewHolder for spinner
     public static class SpinnerViewHolder extends RecyclerView.ViewHolder {
         private final TextView label;
         private final MultiSpinner multiSpinner;
@@ -112,22 +147,31 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         public void bind(FormField field) {
             label.setText(field.getLabel());
+            setRequiredLabel(label, field.getLabel());
             if (field.isMultiple()) {
                 multiSpinner.setVisibility(View.VISIBLE);
                 multiSpinner.setItems(field.getOptions(), new ArrayList<>(field.getOptionLabels()), "Select", selected -> {
-
+                    JSONArray selectedJSONArray = new JSONArray();
+                    for (FormField.Options eachOptions : selected) {
+                        if (eachOptions.isSelected) {
+                            selectedJSONArray.put(eachOptions.id);
+                        }
+                    }
+                    field.setValue(selectedJSONArray.toString());
                 });
                 if (field.getPlaceholder() != null && !field.getPlaceholder().isEmpty()) {
                     multiSpinner.setPrompt(field.getPlaceholder());
                 }
+
+
             } else {
                 spinner.setVisibility(View.VISIBLE);
                 spinner.setAdapter(new ArrayAdapter<>(itemView.getContext(), R.layout.simple_spinner_item, field.getOptionLabels()));
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        if(spinner.getSelectedItem() != null) {
-                            field.setValue(spinner.getSelectedItem().toString());
+                        if (spinner.getSelectedItem() != null && !spinner.getSelectedItem().toString().equals("select")) {
+                            field.setValue(field.getOptions().get(field.getOptionLabels().indexOf(spinner.getSelectedItem().toString()) - 1).id);
                         }
                     }
 
@@ -137,14 +181,81 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     }
                 });
                 int pos = -1;
-                for(FormField.Options eachOptions : field.getOptions()) {
-                    if(eachOptions.isSelected) {
+                for (FormField.Options eachOptions : field.getOptions()) {
+                    if (eachOptions.isSelected) {
                         pos = field.getOptions().indexOf(eachOptions);
                     }
                 }
                 spinner.setSelection(pos);
             }
         }
+    }
+
+    public static class RadioButtonViewHolder extends RecyclerView.ViewHolder {
+        private final TextView label;
+        private final RadioGroup radioGroup;
+
+        public RadioButtonViewHolder(View itemView) {
+            super(itemView);
+            label = itemView.findViewById(R.id.radioInputLabel);
+            radioGroup = itemView.findViewById(R.id.radioGroup);
+        }
+
+        public void bind(FormField field) {
+            setRequiredLabel(label, field.getLabel());
+            radioGroup.removeAllViews();
+            HashSet<String> selectedIds = new HashSet<>();
+
+            // Prepopulate the set if there are already selected values
+            try {
+                JSONArray selectedValues = new JSONArray(field.getValue());
+                for (int i = 0; i < selectedValues.length(); i++) {
+                    selectedIds.add(selectedValues.getString(i));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            ColorStateList colorStateList = new ColorStateList(
+                    new int[][]
+                            {
+                                    new int[]{-android.R.attr.state_enabled}, // Disabled
+                                    new int[]{android.R.attr.state_enabled}   // Enabled
+                            },
+                    new int[]
+                            {
+                                    itemView.getContext().getColor(R.color.themeColor), // disabled
+                                    itemView.getContext().getColor(R.color.themeColor)   // enabled
+                            }
+            );
+
+            for (FormField.Options option : field.getOptions()) {
+                RadioButton radioButton = new RadioButton(itemView.getContext());
+                radioButton.setText(option.label);
+                radioButton.setId(View.generateViewId());
+
+                radioButton.setButtonTintList(colorStateList);
+                radioGroup.addView(radioButton);
+
+                radioButton.setChecked(selectedIds.contains(option.id));
+
+                radioButton.setOnCheckedChangeListener((compoundButton, b) -> {
+                    if (radioButton.isChecked()) {
+                        selectedIds.add(option.id);
+                    } else {
+                        selectedIds.remove(option.id);
+                    }
+
+                    // Convert the set of IDs to JSON array and set the value
+                    JSONArray jsonArray = new JSONArray();
+                    for (String id : selectedIds) {
+                        jsonArray.put(id);
+                    }
+                    field.setValue(jsonArray.toString());
+                });
+            }
+        }
+
     }
 
     public static class DateViewHolder extends RecyclerView.ViewHolder {
@@ -159,9 +270,10 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         void bind(FormField field) {
             label.setText(field.getLabel());
-            dateTextView.setText((!field.getValue().isEmpty()) ? field.getValue() : field.getPlaceholder());
-                setDatePickerDialog(itemView.getContext(), dateTextView, field);
-
+            dateTextView.setHint(field.getPlaceholder());
+            dateTextView.setText((!field.getValue().isEmpty()) ? field.getValue() : "");
+            setDatePickerDialog(itemView.getContext(), dateTextView, field);
+            setRequiredLabel(label, field.getLabel());
         }
 
         void setDatePickerDialog(final Context context, final EditText editText, FormField field) {
@@ -198,5 +310,12 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public EmptyViewHolder(@NonNull View itemView) {
             super(itemView);
         }
+    }
+
+    static void setRequiredLabel(TextView labelView, String label) {
+        String labelText = label + " *";
+        SpannableString spannableString = new SpannableString(labelText);
+        spannableString.setSpan(new ForegroundColorSpan(Color.RED), labelText.length() - 1, labelText.length(), 0);
+        labelView.setText(spannableString);
     }
 }

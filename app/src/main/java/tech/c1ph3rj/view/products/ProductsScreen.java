@@ -2,6 +2,7 @@ package tech.c1ph3rj.view.products;
 
 import static tech.c1ph3rj.view.Services.checkNull;
 import static tech.c1ph3rj.view.Services.token;
+import static tech.c1ph3rj.view.Services.unAuthorize;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class ProductsScreen extends AppCompatActivity {
     ProductsAdapter productsAdapter;
     List<ProductsModel> productsList;
     ArrayList<String> selectedProducts;
+    String lineOfBusinessId;
     LinearLayout nextBtn;
 
     @Override
@@ -59,14 +61,14 @@ public class ProductsScreen extends AppCompatActivity {
             ActionBar actionBar = getSupportActionBar();
             if(actionBar != null) {
                 actionBar.setTitle("Products Screen");
+                actionBar.setHomeAsUpIndicator(R.drawable.back_ic);
                 actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setHomeButtonEnabled(true);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        services = new Services(this);
+        services = new Services(this, this::refresh);
         init();
     }
 
@@ -78,7 +80,7 @@ public class ProductsScreen extends AppCompatActivity {
 
     void init() {
         try {
-            String lineOfBusinessId = getIntent().getStringExtra("lineOfBusinessId");
+            lineOfBusinessId = getIntent().getStringExtra("lineOfBusinessId");
             productsView = findViewById(R.id.productsView);
             searchView = findViewById(R.id.searchView);
             loadingView = findViewById(R.id.loadingView);
@@ -125,11 +127,7 @@ public class ProductsScreen extends AppCompatActivity {
             });
             productsView.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
 
-            loadingView.setVisibility(View.GONE);
-            startLoading();
-
-            getAllProductsAPI(lineOfBusinessId);
-
+            refresh();
         } catch (Exception e) {
             services.handleException(e);
         }
@@ -161,7 +159,7 @@ public class ProductsScreen extends AppCompatActivity {
         });
     }
 
-    private void getAllProductsAPI(String lineOfBusinessId) {
+    private void getAllProductsAPI() {
         try {
             if (services.isNetworkConnected()) {
                 if (services.checkGpsStatus()) {
@@ -197,14 +195,16 @@ public class ProductsScreen extends AppCompatActivity {
 
                                 if (staticResponse.body() != null) {
                                     if (staticResponse.code() == 401) {
-                                        //TODO HANDLE UN AUTH
+                                        stopLoading();
+                                        unAuthorize(this);
                                     } else {
                                         String responseString = staticResponse.body().string();
                                         JSONObject staticResObj = new JSONObject(responseString);
                                         String rCode = staticResObj.optString("rcode");
                                         if (checkNull(rCode)) {
                                             if (rCode.equals("401")) {
-                                                //TODO HANDLE UN AUTH
+                                                stopLoading();
+                                                unAuthorize(this);
                                             } else if (rCode.equals("200")) {
                                                 JSONArray productsArray = staticResObj.getJSONObject("rObj").getJSONArray("getAllProduct");
 
@@ -285,12 +285,23 @@ public class ProductsScreen extends AppCompatActivity {
                     stopLoading();
                 }
             } else {
-                //TODO HANDLE NETWORK
+                services.checkNetworkVisibility();
             }
         } catch (Exception e) {
             handleException(e);
         }
     }
+
+    void refresh() {
+        try {
+            loadingView.setVisibility(View.GONE);
+            startLoading();
+            getAllProductsAPI();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void filterData(String query) {
         // Create a new list to store the filtered data

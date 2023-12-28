@@ -2,6 +2,7 @@ package tech.c1ph3rj.view.line_of_business;
 
 import static tech.c1ph3rj.view.Services.checkNull;
 import static tech.c1ph3rj.view.Services.token;
+import static tech.c1ph3rj.view.Services.unAuthorize;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -40,7 +41,6 @@ import tech.c1ph3rj.view.products.ProductsScreen;
 public class LineOfBusinessScreen extends AppCompatActivity {
     Services services;
     EditText searchView;
-    ImageView backBtn;
     ListView lineOfBusinessView;
     ShimmerFrameLayout loadingView;
     LineOfBusinessAdapter lineOfBusinessAdapter;
@@ -53,8 +53,9 @@ public class LineOfBusinessScreen extends AppCompatActivity {
 
         try {
             ActionBar actionBar = getSupportActionBar();
-            if(actionBar != null) {
+            if (actionBar != null) {
                 actionBar.setTitle("Line Of Business");
+                actionBar.setHomeAsUpIndicator(R.drawable.back_ic);
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setHomeButtonEnabled(true);
             }
@@ -62,7 +63,7 @@ public class LineOfBusinessScreen extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        services = new Services(this);
+        services = new Services(this, this::refresh);
         init();
     }
 
@@ -102,6 +103,19 @@ public class LineOfBusinessScreen extends AppCompatActivity {
         }
     }
 
+    void refresh() {
+        runOnUiThread(() -> {
+            try {
+                loadingView.setVisibility(View.GONE);
+                startLoading();
+                getAllLineOffBusinessAPI();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+
     void startLoading() {
         runOnUiThread(() -> {
             try {
@@ -129,13 +143,8 @@ public class LineOfBusinessScreen extends AppCompatActivity {
                     new Thread(() -> {
                         try {
                             String baseUrl = services.baseUrl + "api/digital/core/MasterData/FetchMasterData";
-                            OkHttpClient client = new OkHttpClient.Builder()
-                                    .connectTimeout(120, TimeUnit.SECONDS)
-                                    .writeTimeout(120, TimeUnit.SECONDS)
-                                    .readTimeout(120, TimeUnit.SECONDS)
-                                    .build();
-                            final MediaType JSON
-                                    = MediaType.parse("application/json; charset=utf-8");
+                            OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS).writeTimeout(120, TimeUnit.SECONDS).readTimeout(120, TimeUnit.SECONDS).build();
+                            final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
                             JsonObject details = new JsonObject();
                             details.addProperty("functionalClassification", "26000");
 
@@ -143,11 +152,7 @@ public class LineOfBusinessScreen extends AppCompatActivity {
 
 
                             RequestBody body = RequestBody.create(insertString, JSON);
-                            Request request = new Request.Builder()
-                                    .url(baseUrl)
-                                    .header("Authorization", "Bearer " + token)
-                                    .post(body)
-                                    .build();
+                            Request request = new Request.Builder().url(baseUrl).header("Authorization", "Bearer " + token).post(body).build();
 
                             Response staticResponse;
 
@@ -156,14 +161,15 @@ public class LineOfBusinessScreen extends AppCompatActivity {
 
                                 if (staticResponse.body() != null) {
                                     if (staticResponse.code() == 401) {
-                                        //TODO HANDLE UN AUTH
+                                        stopLoading();
+                                        unAuthorize(this);
                                     } else {
                                         String responseString = staticResponse.body().string();
                                         JSONObject staticResObj = new JSONObject(responseString);
                                         String rCode = staticResObj.optString("rcode");
                                         if (checkNull(rCode)) {
                                             if (rCode.equals("401")) {
-                                                //TODO HANDLE UN AUTH
+                                                unAuthorize(this);
                                             } else if (rCode.equals("200")) {
                                                 // Parse the JSON array
                                                 JSONArray jsonArray = staticResObj.getJSONObject("rObj").getJSONArray("fetchMasterData");
@@ -237,7 +243,7 @@ public class LineOfBusinessScreen extends AppCompatActivity {
                     stopLoading();
                 }
             } else {
-                //TODO HANDLE NETWORK
+                services.checkNetworkVisibility();
             }
         } catch (Exception e) {
             handleException(e);

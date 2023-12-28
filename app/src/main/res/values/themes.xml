@@ -4,7 +4,7 @@
         <item name="colorPrimary">@color/themeColor</item>
         <item name="colorOnSurface">@color/white</item>
         <item name="colorSurface">@color/themeColor</item>
-
+        <item name="fontFamily">@font/latinotypeantartidaroundedmedium</item>
         <item name="android:datePickerDialogTheme">@style/MyDatePickerStyle</item>
 
     </style>
@@ -26,7 +26,11 @@
 
     <style name="Theme.View" parent="Base.Theme.View" />
 
-    <style name="BlackIconsStatusBarTheme" parent="Base.Theme.View">
+    <style name="DarkThemeStatusBar" parent="Base.Theme.View">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/white</item>
+    </style>
+    <style name="ThemeColorStatusBar" parent="Base.Theme.View">
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">@color/themeColor</item>
     </style>

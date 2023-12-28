@@ -53,9 +53,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="6dp"
                         tools:text="textTitle"
-                        android:textAlignment="center"
                         android:textColor="@color/themeColor"
-                        android:textSize="19dp"
+                        android:textSize="18dp"
                         android:textStyle="bold" />
 
 
@@ -66,7 +65,7 @@
                         android:layout_marginBottom="4dp"
                         tools:text="if_the_two_cars_met_with_an_accident"
                         android:textColor="@color/black"
-                        android:textSize="15dp" />
+                        android:textSize="14dp" />
 
                 </LinearLayout>
 

@@ -4,13 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.SystemClock;
 import android.provider.Settings;
+import android.view.View;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -31,6 +33,11 @@ import okhttp3.Response;
 public class Services {
     Context context;
     Activity activity;
+    RefreshListener refreshListener;
+    public static int base_version;
+    public static String app_version;
+    private DatabaseHelper mydb;
+    private long mLastClickTime = 0;
     public static String response = "{\n" +
             "  \"rcode\": 200,\n" +
             "  \"rObj\": {\n" +
@@ -63,7 +70,7 @@ public class Services {
             "              \"placeholder\": \"Select\",\n" +
             "              \"valueProp\": \"value\",\n" +
             "              \"labelProp\": \"label\",\n" +
-            "              \"type\": \"select\",\n" +
+            "              \"type\": \"radio\",\n" +
             "              \"multiple\": null,\n" +
             "              \"selectAllOption\": null,\n" +
             "              \"cascadingParentControl\": null,\n" +
@@ -319,13 +326,13 @@ public class Services {
             "    }\n" +
             "  ],\n" +
             "  \"reqID\": \"bcfd7d13-b497-4d6f-8a69-e73620534e20\",\n" +
-            "  \"objectDBID\": null,\n" +
+            "  \"objectDB  ID\": null,\n" +
             "  \"transactionRef\": null,\n" +
             "  \"outcome\": true,\n" +
             "  \"outcomeMsgCode\": \"Success\",\n" +
             "  \"reDirectURL\": null\n" +
             "}";
-    public static String token = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiI4YmI1NDE4YWYzYjQ0YjdiOTI2OGM3YjRhYTg1NTYzMiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.HZiyeSpf2DOM8T8-i3UK1KuFqC-D9zIOdR1hgcm5V93zxGY8ZlZvhtUKTkGIGrHZ185_DW6WPOiZOVS9iaikp2I0-9rofJncHZAQz2kjzy4MCPaJOLHgHepxPpiql_Tohr75zizA0mxupiRYmQ2MC9lwtX3Qo1N9c-EuA_vFkSm7eVerD68RPDMe24_x8TXQsVeWjwV1z3yl4iRwFY4WOlti5Iist3XIB8D0A_gGJ9-WyvX-LnrQqum_569C3X2c8qkIDPAH15ZDLwWIjZL7ecrET99gaTqg-FLUYMHZXygkez2fIA1E23atsh_6zHm82fv7nWzmDH2ZcHoxDHZ6Qg.aXJ9Jlco0I674s5_HcvXbA.PRCSvyQB9onD_mHHpXCGMiAVjriUl5gcLASnOEBR0Jj_uJIaNAkDn7ISrMjwjvZYRRd8Vz2huKiJbXuHp-UeXw18HeMXSP5WaTier3clTnODgHeG-GdJ5Xg-a76d9m2rqUtYxRdmtaebHOgeU7MPQLnknHL2SNYrHfbb92fAfRg95TFYDmvV8Qpff5pmRVG3WyH-72wIXa6FviNoSoYiImofBy4U-7r98REye2suhYUkrM4k40dkCRVdc4UXm0Ydvt75l6hLIlhYdkebgViwuKQZhKR6auZMwlZb7ZfiY5-wwu__lDjk9MKfzcRcoWbSFVusQlO8w5mMKo-90gc8IGbpRl3uOWA6PC6Rg_fcJS5qGBTbM9i-STiQnSf5SDli6_scpN_kTCZE8-FYxtexXpgvSBMYxidYiB1UV9P1wm_uIDts2bpjoEzeEPes9HedjtV6v7w0IoYcMb9w_GGriuVbrcibPc-UllHlujB0ljmBVnhkofPURVubXn68-kSikZX1g1k7fpRuHp5ZdWqlr7OmzwuS-MBDRzFCUtfA4DHAdDM8ORvJmqsLgxwTYV0lIdthB8oC9aMSduIAvU0h8Xviy_YH_9pzSxSmmYHlm91m3Xn8n7_vXGv8N_dxT5Tb7cjgPPbGDyuNpCbxM5PDXVGJAv1eafjB4bxs74ziglxHGUQX89HnlLFww_he-9YJn1Sj9pOJWylCSPhCyuvMBACXsskwCMstzSTiBumouWvod48TR9dOKZnsapO4gvX2BLdzb4y1QUD7yW6P_EXaGa85zadwocZShe2Linf8zp4-9vQlGBCKGEyiHRND2B5dFhB8B-UUbQqGUKNC4UJVNl7Z3lp3w6HJefX0WBg6d3jE-9LlfpdBRdIp-ODyxtL_c0ZiD0zMtsUJtPrCDRWfYGofELa3sMMtBGqszKBky717FImqo9s3Uyp1LpgJcj8OfutLj8SbvBUNq2D6Tzdx2My21PIvRHS58ASXIxCYsM-50Rn_aWwRnorxQ8Z5CttvAsl41LUcridXRBG2xy8emS4t1F5riI1QA5VGy_i8a2VsufX1zNgNVxJQ-0Dp5HSrdCaH7l1QJT8dMM1PSQXrv0TUYN9hKiwhtog_Qr6TPgGtDuf1HAMdBXo2VRhXGFrVszVXgPE7LUmRQMhxa0xFhOoHdR4rfUcl9eSjzZtmYBGqZj42beerrFjrey8QLsJcmcY--mcp6fYlN-4folobmCPjeKPQ_LjvpIApHQ9-n1g47HbSDiJSBNU9LLoU6VENRm7xo7J4nr8CNJp7835QaUTDnnYKSF2Lpow279LXNhmdWvRzCEAzX4hAyvoWic2KlVM6kWuAbJ-udgKYtJGUc08ugtQw_E6Oje-QcX2xvcZtIEILt7wKlwcddu9_ZaFFl0xROCQBSkPwy9bqggx2rg.GJsoKV-tTAod-tiUsYzRT2PZszL7jxRrtJn3ZLnIx90";
+    public static String token = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiI4YmI1NDE4YWYzYjQ0YjdiOTI2OGM3YjRhYTg1NTYzMiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.QIWpiJ5rdC5r7lakcFEDGjte-CgRdoSitc7kawO109YT5FMXBV7xWnm7UroTNbPcWmOQTkk_HV5cvyRExOBhKMp1fR9fJr7pt71XAptJuEW3YNPPGtXIsnC5qXAsgSPBNCMd9Xh2HoBUt1crx5a6IhWBT5M24r1WulY65dmQh8--1cCW2aPZYG-uQeelWEV799jhvOl3eyYMXrPC1w6qXiJpKOAE-el7nFf4ohDGAXOGeG49FPwgqjwzl5S2eh1QeFYkFp3sk8eFJ4FI3980629z2335TsKeQZvwfA6D6gxcBbR8V9hMSsLQgN7FqLehZdEpBWKghfJYSzQi65FPJA.D9zCaiDJng9xlye2BwhqzA.YC0lqYKVy9PQCY0_-c-7GTtg7wP1qttiYOtKD5Ni7TKvJEFrKpaQckm-fAaSmP9k2g2PnoZcGindL6tp6KWuVeCULQxX74o9_9jzLoWSdmmg74Pdq3KANogHNw-70FG-VXm_NTdpGpGLjB1UlsATSWyFfz_SxT1v8w09S3Em--StPVZLv6qBTnxYRuYSSwbLI_kVptm9D73_cL90p-osYI4ChVwFMpgXN04KJ1cfs2NZlYhJb_of1-hvW-KJpcwhGH4lus16rcT0pCSPl4__9lRL34-VdR2GN0K0p0wS7Drc8AK6hnrsC-Egvs_nsnMBbj3107B8NCD8Yzbw6LCPEsA6dXsb9iXp64XlhfSPApTg-s9kCxfmnPlG8ZXzuv6JJ-U7nI2t9bH1JMhvPx1zZxdZdkKsk7i4pLsT6dZGX2MJwgjVINX4k1BkQQGrRQcb27esZ6Gj62wq68LEqDVHWNLhMyN0qnN31e4ltXqRge5jeHu5JrIb_oybTU8OgZf_8ZgeDyI5xdZSI1zJW7XOUIPQWUPKFE9iHTHjPFwEUrD2piq1l7OQsAuhP9TfB6sIIoYNoFnw81DXWzJX7tJJuyFChV7uV5n8mlrFV8QcU9mBf6cJNy6VlHtac3KDte8k-1DiD1ItFxa8L3qRuKunuhyL_FKWB-XKn7b4WfUn0z4SIsQwXOzFEBvvCiIV9benrX3JjrKRKT3R9HG8OxaV89au6Qq8TWA_h0B2bvOqBljgDR700lo72rMhnSHJvMLpWG5qWXfVw-T9VXQW4L8Y8ZriTiSAGA56ngI8BTzzK1qnrPH41wFyhwj6mMqsIVakibkn9sgsY7PC_SOMB5QHq85JY43hG6vGZiWxzeznngqjwxARu4Ad3D0jJWKlkI4ms6Npan1gTSc3SFBsT8IVLo1Bet3Z1JtplXzFFtOeawAS6n3WjEMoqOuAkI_okjfAPs_s3QfpfSJuDWnefMyz7ciwULR8HlI9i9oercHZs2O3vtaCL0ECWwbTJMqgfuGc0xQ7nfw0qKbhitLqwpS961_uDFXFV5dt5JQZ5_EqFCGnRtvvZaQw7bdA-jyZl3OS6p2-CzkzZ1rdzkis9FmD5lgfvMz8nAYx1AO0j5zkQV9dODZ6iNiBV8Pe8hiRf9bkCacIq9aRet-gEBEbbhWya74PwANfI_KgCywXXRAoASnpbXp2tPvfdbVHuXhm2PTQs6ZPS7IKX1DGKO-T6Ff-FnyGhecH3Hx9ypbHfIway2e_j4NE7oXixbIHMdYtlvRsqPuuSBC4P8GB9pNBaCNrsSl4qSJcpk0x5D_-TWOh746VGTFIvh-wNk5yMw49Fu0KVxy493UUSEYeYyGftrBm8dVCBFBps9hoUNHYpOM_pAvKUu-__BlSWr8hQ-CrIKcEJEK2leHv-ooVKoNuCF2t5w.cNvYpCHJCncvaQCI4zvCjRXnlw0IIedlvk-EjM7W8bE";
     public String baseUrl;
     public Dialog loader;
     public static final MediaType JSON = MediaType.get("application/json");
@@ -335,11 +342,37 @@ public class Services {
             .readTimeout(120, TimeUnit.SECONDS)
             .build();
 
-    public Services(Context context) {
+    public Services(Context context, RefreshListener refreshListener) {
         this.context = context;
         activity = (Activity)context;
+        this.refreshListener = refreshListener;
         baseUrl = activity.getString(R.string.base_url);
         loader = initLoaderDialog();
+        app_version = context.getString(R.string.app_version);
+        String[] app_version_split = app_version.split("\\.");
+        base_version = Integer.parseInt(app_version_split[0]);
+    }
+
+    public static void unAuthorize(Activity activity)
+    {
+        try {
+            activity.runOnUiThread(() -> {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
+                dialog.setMessage(activity.getString(R.string.session_expired));
+                dialog.setPositiveButton("Ok", (dialog1, which) -> {
+                    DatabaseHelper mydb = new DatabaseHelper(activity);
+                    mydb.deleteTokenData();
+                    Intent login = new Intent(activity, MainActivity.class);
+                    activity.startActivity(login);
+                    mydb.close();
+                });
+                AlertDialog alert = dialog.create();
+                alert.setCancelable(false);
+                alert.show();
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void showDialog() {
@@ -349,6 +382,28 @@ public class Services {
             }
         });
     }
+
+    public void checkNetworkVisibility() {
+        LinearLayout noInternetLayout = activity.findViewById(R.id.noInternetLayout);
+        if (isNetworkConnected()) {
+            if (noInternetLayout != null) {
+                noInternetLayout.setVisibility(View.GONE);
+            }
+        } else {
+            if (noInternetLayout != null) {
+                noInternetLayout.setVisibility(View.VISIBLE);
+                activity.findViewById(R.id.refreshButton).setOnClickListener(onClickRefresh -> {
+                    if (preventDoubleClick()) {
+                        noInternetLayout.setVisibility(View.GONE);
+                        if(refreshListener != null) {
+                            refreshListener.onCalledRefresh();
+                        }
+                    }
+                });
+            }
+        }
+    }
+
 
     // You can add more methods as needed, such as dismissing the dialog
     public void dismissDialog() {
@@ -402,6 +457,14 @@ public class Services {
         activity.runOnUiThread(()-> Toast.makeText(context, "Something went wrong!", Toast.LENGTH_SHORT).show());
     }
 
+    public boolean preventDoubleClick() {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000){
+            return false;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+        return true;
+    }
+
     public void showErrorMessageFromAPI(JSONArray rMsg) {
         activity.runOnUiThread(()->{
             try {
@@ -423,6 +486,9 @@ public class Services {
                 e.printStackTrace();
             }
         });
+    }
+    public interface RefreshListener {
+        void onCalledRefresh();
     }
 
     public boolean isNetworkConnected() {

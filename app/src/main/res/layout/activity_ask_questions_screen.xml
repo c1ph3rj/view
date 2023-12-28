@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightGrey"
+    android:orientation="vertical"
+    tools:context=".ask_questions.AskQuestionsScreen">
+
+    <include layout="@layout/no_internet_layout" android:id="@+id/noInternetLayout"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/askQuestionsLayout"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="6dp"
+            android:layout_centerInParent="true">
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="15dp"
+                android:layout_marginTop="25dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@drawable/card_background">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ask me a question"
+                        android:padding="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_gravity="center"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="150dp"
+                        android:gravity="start"
+                        android:padding="8dp"
+                        android:id="@+id/questionView"
+                        android:layout_margin="14dp"
+                        android:textStyle="normal"
+                        android:backgroundTint="@color/greyLight"
+                        android:hint="Type something..."
+                        android:background="@drawable/card_background"
+                        android:layout_marginTop="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:id="@+id/sendBtn"
+                        android:background="@color/themeColor"
+                        android:gravity="center"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Send"
+                            android:textStyle="bold"
+                            android:textSize="18dp"
+                            android:textColor="@color/white"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:translationZ="0dp"
+                android:layout_gravity="center_horizontal|top"
+                android:background="@drawable/circle_shape" >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/question_ic"
+                    app:tint="@color/themeColor"/>
+
+            </LinearLayout>
+        </FrameLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="0dp"
+            android:layout_weight="1">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:id="@+id/questionAndAnswerView"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Question :"
+                        android:textStyle="bold"
+                        android:textSize="18dp"
+                        android:textColor="@color/themeColor"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/userQuestionView"
+                        android:letterSpacing=".04"
+                        android:visibility="visible"
+                        android:layout_margin="4dp"
+                        android:text="Type your question in the above text field and press send to get the answer!"
+                        android:background="@drawable/card_background"
+                        android:backgroundTint="@color/greyLight"
+                        android:padding="8dp"
+                        android:lineSpacingExtra="2dp"
+                        android:textSize="16dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Answer :"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/themeColor"/>
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/loadingView"
+                        android:visibility="gone"
+                        android:layout_margin="4dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:background="@drawable/card_background"
+                            android:backgroundTint="@color/greyDark"/>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/answerView"
+                        android:letterSpacing=".04"
+                        android:visibility="gone"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/card_background"
+                        android:backgroundTint="@color/greyLight"
+                        android:padding="8dp"
+                        android:lineSpacingExtra="2dp"
+                        android:textSize="16dp"/>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</LinearLayout>

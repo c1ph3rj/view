@@ -14,6 +14,9 @@ public class FormField {
     private String templateType;
     private boolean isSelectAllEnabled;
     private List<Options> options;
+    public boolean isRequired;
+    public String regexPattern;
+    public String validationMsg;
 
     public List<String> getOptionLabels() {
         return optionLabels;

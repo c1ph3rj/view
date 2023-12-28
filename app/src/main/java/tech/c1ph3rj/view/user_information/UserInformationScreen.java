@@ -42,6 +42,8 @@ public class UserInformationScreen extends AppCompatActivity {
     Services services;
     EditText nameView, phoneNoView, emailView;
     LinearLayout nextBtn;
+    String name, email, phoneNo;
+    String[] selectedProductIds;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,7 @@ public class UserInformationScreen extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        services = new Services(this);
+        services = new Services(this, this::refresh);
         init();
     }
 
@@ -67,18 +69,27 @@ public class UserInformationScreen extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    void refresh() {
+        try {
+            services.showDialog();
+            insertQuotationAPI();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     void init() {
         try {
-            String[] selectedProductIds = getIntent().getStringArrayExtra("productIds");
+            selectedProductIds = getIntent().getStringArrayExtra("productIds");
             nameView = findViewById(R.id.nameView);
             emailView = findViewById(R.id.emailView);
             phoneNoView = findViewById(R.id.phoneNoView);
             nextBtn = findViewById(R.id.nextBtn);
 
             nextBtn.setOnClickListener(onClickNext -> {
-                String name = nameView.getText().toString().trim();
-                String email = emailView.getText().toString().trim().toLowerCase(Locale.getDefault());
-                String phoneNo = phoneNoView.getText().toString().trim();
+                name = nameView.getText().toString().trim();
+                email = emailView.getText().toString().trim().toLowerCase(Locale.getDefault());
+                phoneNo = phoneNoView.getText().toString().trim();
                 String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
                 if(!checkNull(name)) {
@@ -106,8 +117,7 @@ public class UserInformationScreen extends AppCompatActivity {
                     return;
                 }
 
-                services.showDialog();
-                insertQuotationAPI(name, email, phoneNo, selectedProductIds);
+                refresh();
             });
 
         } catch (Exception e) {
@@ -115,7 +125,7 @@ public class UserInformationScreen extends AppCompatActivity {
         }
     }
 
-    private void insertQuotationAPI(String name, String email, String phoneNo, String[] selectedProductIds) {
+    private void insertQuotationAPI() {
         try {
             if (services.isNetworkConnected()) {
                 if (services.checkGpsStatus()) {
