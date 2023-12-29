@@ -9,6 +9,7 @@ import androidx.cardview.widget.CardView;
 
 import tech.c1ph3rj.library.CurvedBottomNavigation;
 import tech.c1ph3rj.view.ask_questions.AskQuestionsScreen;
+import tech.c1ph3rj.view.audio_translate.AudioRecorder;
 import tech.c1ph3rj.view.custom_forms.CustomForms;
 import tech.c1ph3rj.view.faq.FAQScreen;
 import tech.c1ph3rj.view.line_of_business.LineOfBusinessScreen;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             mainOptionsBtn = findViewById(R.id.mainOptionsBtn);
             mainOptionsBtn.setOnClickListener(onClickMainOptions ->
                     startActivity(new Intent(this, LineOfBusinessScreen.class)));
-            startActivity(new Intent(this, FAQScreen.class));
+            startActivity(new Intent(this, AudioRecorder.class));
         } catch (Exception e) {
             e.printStackTrace();
         }

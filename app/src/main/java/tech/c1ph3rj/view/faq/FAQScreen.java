@@ -41,8 +41,8 @@ public class FAQScreen extends AppCompatActivity {
 
     void init() {
         try {
-            findViewById(R.id.backBtn)
-                    .setOnClickListener(onClickBack -> getOnBackPressedDispatcher().onBackPressed());
+//            findViewById(R.id.backBtn)
+//                    .setOnClickListener(onClickBack -> getOnBackPressedDispatcher().onBackPressed());
             findViewById(R.id.askQuestionsBtn)
                     .setOnClickListener(onClickAskQuestions -> startActivity(new Intent(this, AskQuestionsScreen.class)));
             initExpandableListView();
@@ -103,9 +103,9 @@ public class FAQScreen extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        getOnBackPressedDispatcher().onBackPressed();
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+////        getOnBackPressedDispatcher().onBackPressed();
+//        return super.onOptionsItemSelected(item);
+//    }
 }

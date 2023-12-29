@@ -52,6 +52,10 @@ public class PermissionManager {
         return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) ? new String[]{PERMISSION_WRITE_STORAGE, PERMISSION_READ_STORAGE} : new String[]{PERMISSION_READ_IMAGE, PERMISSION_READ_VIDEO, PERMISSION_READ_AUDIO};
     }
 
+    public String[] recordAudioPermissionArray() {
+        return new String[]{PERMISSION_RECORD_AUDIO};
+    }
+
     public String[] cameraAndStoragePermissionArray() {
         return (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) ? new String[]{PERMISSION_CAMERA, PERMISSION_WRITE_STORAGE, PERMISSION_READ_STORAGE, PERMISSION_RECORD_AUDIO} : new String[]{PERMISSION_CAMERA, PERMISSION_READ_IMAGE, PERMISSION_READ_VIDEO, PERMISSION_READ_AUDIO, PERMISSION_RECORD_AUDIO};
     }

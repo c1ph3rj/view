@@ -33,16 +33,15 @@ import tech.c1ph3rj.view.Services;
 public class AskQuestionsScreen extends AppCompatActivity {
     Services services;
     TextView answerView;
-    EditText questionView;
-    LinearLayout sendBtn;
-    LinearLayout askQuestionLayout;
     ShimmerFrameLayout loadingView;
     TextView userQuestionView;
     LinearLayout questionAndAnswerLayout;
+    EditText questionView;
+    LinearLayout sendBtn;
+    LinearLayout askQuestionLayout;
     boolean isTyping;
-    private final String QUERY_URL = "https://rag-llm.azurewebsites.net/ask_v2";
-
     int index = 0;
+    private final String QUERY_URL = "https://rag-llm.azurewebsites.net/ask_v2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +75,12 @@ public class AskQuestionsScreen extends AppCompatActivity {
     void init() {
         try {
             askQuestionLayout = findViewById(R.id.askQuestionsLayout);
-            sendBtn = findViewById(R.id.sendBtn);
             questionView = findViewById(R.id.questionView);
             answerView = findViewById(R.id.answerView);
             loadingView = findViewById(R.id.loadingView);
             userQuestionView = findViewById(R.id.userQuestionView);
             questionAndAnswerLayout = findViewById(R.id.questionAndAnswerView);
+            sendBtn = findViewById(R.id.sendBtn);
 
             loadingView.setVisibility(View.GONE);
             answerView.setVisibility(View.GONE);

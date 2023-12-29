@@ -11,4 +11,9 @@
     <string name="session_expired">Your session has been expired. Please login again to continue</string>
     <string name="app_version" translatable="false">1.0.1</string>
     <string name="reset_timer">00:00:00</string>
+
+    <string-array name="languageList">
+        <item>Tamil</item>
+        <item>French</item>
+    </string-array>
 </resources>
