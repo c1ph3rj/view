@@ -186,139 +186,144 @@ public class AudioRecorder extends AppCompatActivity {
 
             speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
             recordBtn.setOnClickListener(onClickRecordBtn -> {
-                if (isTyping) {
-                    Toast.makeText(this, "Please wait while the previous response is processing...", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (isRecording) {
-                        speechRecognizer.stopListening();
+                if(isFrenchModelAvailable && isTamilModelAvailable) {
+                    if (isTyping) {
+                        Toast.makeText(this, "Please wait while the previous response is processing...", Toast.LENGTH_SHORT).show();
                     } else {
-                        String selectedLanguage = languageSpinner.getSelectedItem().toString();
-                        final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, (selectedLanguage.equals("Tamil")) ? "ta-IN" : "fr");
-                        speechRecognizer.setRecognitionListener(new RecognitionListener() {
-                            @Override
-                            public void onReadyForSpeech(Bundle bundle) {
-                                outputView.setText("Speak...");
-                            }
+                        if (isRecording) {
+                            speechRecognizer.stopListening();
+                        } else {
+                            String selectedLanguage = languageSpinner.getSelectedItem().toString();
+                            final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                            speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                            speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, (selectedLanguage.equals("Tamil")) ? "ta-IN" : "fr");
+                            speechRecognizer.setRecognitionListener(new RecognitionListener() {
+                                @Override
+                                public void onReadyForSpeech(Bundle bundle) {
+                                    outputView.setText("Speak...");
+                                }
 
-                            @Override
-                            public void onBeginningOfSpeech() {
-                                isTyping = true;
-                                outputView.setText("Listening...");
-                            }
+                                @Override
+                                public void onBeginningOfSpeech() {
+                                    isTyping = true;
+                                    outputView.setText("Listening...");
+                                }
 
-                            @Override
-                            public void onRmsChanged(float v) {
+                                @Override
+                                public void onRmsChanged(float v) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onBufferReceived(byte[] bytes) {
+                                @Override
+                                public void onBufferReceived(byte[] bytes) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onEndOfSpeech() {
-                                recorderIc.setImageTintList(ColorStateList.valueOf(getColor(R.color.black)));
-                                outputView.setText("Processing...");
-                            }
+                                @Override
+                                public void onEndOfSpeech() {
+                                    recorderIc.setImageTintList(ColorStateList.valueOf(getColor(R.color.black)));
+                                    outputView.setText("Processing...");
+                                }
 
-                            @Override
-                            public void onError(int i) {
-                                isTyping = false;
-                                outputView.setText("");
-                            }
-
-                            @Override
-                            public void onResults(Bundle result) {
-                                ArrayList<String> matches = result.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                                if (matches != null) {
-                                    String outputText = matches.get(0);
-                                    if (outputText.isEmpty()) {
-                                        isTyping = false;
-                                        outputView.setText("");
-                                    } else {
-                                        try {
-                                            if (languageTranslator != null) {
-                                                languageTranslator.translate(outputText).addOnCompleteListener(task -> {
-                                                    if (task.isSuccessful()) {
-                                                        String translatedText = task.getResult();
-                                                        question = outputText;
-                                                        HttpUrl queryUrl = HttpUrl.parse(QUERY_URL);
-                                                        if (queryUrl != null) {
-                                                            HttpUrl.Builder urlBuilder = queryUrl.newBuilder();
-                                                            urlBuilder.addQueryParameter("input", translatedText);
-                                                            answerView.setText("");
-                                                            answerView.setVisibility(View.GONE);
-                                                            startLoading();
-                                                            userQuestionView.setText("");
-                                                            userQuestionView.setText(question);
-                                                            questionAndAnswerLayout.setVisibility(View.VISIBLE);
-                                                            askLlmAPI(urlBuilder.build().toString());
-                                                        }
-                                                    } else {
-                                                        outputView.setText(outputText);
-                                                        if (task.getException() != null) {
-                                                            task.getException().printStackTrace();
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                } else {
+                                @Override
+                                public void onError(int i) {
                                     isTyping = false;
                                     outputView.setText("");
                                 }
-                            }
 
-                            @Override
-                            public void onPartialResults(Bundle bundle) {
+                                @Override
+                                public void onResults(Bundle result) {
+                                    ArrayList<String> matches = result.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                                    if (matches != null) {
+                                        String outputText = matches.get(0);
+                                        if (outputText.isEmpty()) {
+                                            isTyping = false;
+                                            outputView.setText("");
+                                        } else {
+                                            try {
+                                                if (languageTranslator != null) {
+                                                    languageTranslator.translate(outputText).addOnCompleteListener(task -> {
+                                                        if (task.isSuccessful()) {
+                                                            String translatedText = task.getResult();
+                                                            question = outputText;
+                                                            HttpUrl queryUrl = HttpUrl.parse(QUERY_URL);
+                                                            if (queryUrl != null) {
+                                                                HttpUrl.Builder urlBuilder = queryUrl.newBuilder();
+                                                                urlBuilder.addQueryParameter("input", translatedText);
+                                                                answerView.setText("");
+                                                                answerView.setVisibility(View.GONE);
+                                                                startLoading();
+                                                                userQuestionView.setText("");
+                                                                userQuestionView.setText(question);
+                                                                questionAndAnswerLayout.setVisibility(View.VISIBLE);
+                                                                askLlmAPI(urlBuilder.build().toString());
+                                                            }
+                                                        } else {
+                                                            outputView.setText(outputText);
+                                                            if (task.getException() != null) {
+                                                                task.getException().printStackTrace();
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    } else {
+                                        isTyping = false;
+                                        outputView.setText("");
+                                    }
+                                }
 
-                            }
+                                @Override
+                                public void onPartialResults(Bundle bundle) {
 
-                            @Override
-                            public void onEvent(int i, Bundle bundle) {
+                                }
 
-                            }
-                        });
-                        TranslatorOptions languageTranslatorOption =
-                                new TranslatorOptions.Builder()
-                                        .setSourceLanguage((selectedLanguage.equals("French")) ? TranslateLanguage.FRENCH : TranslateLanguage.TAMIL)
-                                        .setTargetLanguage(TranslateLanguage.ENGLISH)
-                                        .build();
-                        TranslatorOptions responseTranslatorOption =
-                                new TranslatorOptions.Builder()
-                                        .setSourceLanguage(TranslateLanguage.ENGLISH)
-                                        .setTargetLanguage((selectedLanguage.equals("French")) ? TranslateLanguage.FRENCH : TranslateLanguage.TAMIL)
-                                        .build();
-                        languageTranslator =
-                                Translation.getClient(languageTranslatorOption);
-                        outputTranslator = Translation.getClient(responseTranslatorOption);
+                                @Override
+                                public void onEvent(int i, Bundle bundle) {
 
-                        getLifecycle().addObserver(languageTranslator);
+                                }
+                            });
+                            TranslatorOptions languageTranslatorOption =
+                                    new TranslatorOptions.Builder()
+                                            .setSourceLanguage((selectedLanguage.equals("French")) ? TranslateLanguage.FRENCH : TranslateLanguage.TAMIL)
+                                            .setTargetLanguage(TranslateLanguage.ENGLISH)
+                                            .build();
+                            TranslatorOptions responseTranslatorOption =
+                                    new TranslatorOptions.Builder()
+                                            .setSourceLanguage(TranslateLanguage.ENGLISH)
+                                            .setTargetLanguage((selectedLanguage.equals("French")) ? TranslateLanguage.FRENCH : TranslateLanguage.TAMIL)
+                                            .build();
+                            languageTranslator =
+                                    Translation.getClient(languageTranslatorOption);
+                            outputTranslator = Translation.getClient(responseTranslatorOption);
 
-                        DownloadConditions conditions = new DownloadConditions.Builder()
-                                .build();
-                        languageTranslator.downloadModelIfNeeded(conditions)
-                                .addOnSuccessListener(unused -> {
-                                    outputView.setText("");
-                                    recorderIc.setImageTintList(ColorStateList.valueOf(getColor(R.color.red)));
-                                    speechRecognizer.startListening(speechRecognizerIntent);
-                                })
-                                .addOnFailureListener(e -> {
-                                    outputView.setText("");
-                                    e.printStackTrace();
-                                });
-                        outputTranslator.downloadModelIfNeeded(conditions)
-                                .addOnSuccessListener(unused -> {
-                                    System.out.println("Downloaded Required Models");
-                                })
-                                .addOnFailureListener(Throwable::printStackTrace);
+                            getLifecycle().addObserver(languageTranslator);
+
+                            DownloadConditions conditions = new DownloadConditions.Builder()
+                                    .build();
+                            languageTranslator.downloadModelIfNeeded(conditions)
+                                    .addOnSuccessListener(unused -> {
+                                        outputView.setText("");
+                                        recorderIc.setImageTintList(ColorStateList.valueOf(getColor(R.color.red)));
+                                        speechRecognizer.startListening(speechRecognizerIntent);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        outputView.setText("");
+                                        e.printStackTrace();
+                                    });
+                            outputTranslator.downloadModelIfNeeded(conditions)
+                                    .addOnSuccessListener(unused -> {
+                                        System.out.println("Downloaded Required Models");
+                                    })
+                                    .addOnFailureListener(Throwable::printStackTrace);
+                        }
                     }
+                }
+                else {
+                    Toast.makeText(this, "Please wait while the required languages models are downloading...", Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (Exception e) {
