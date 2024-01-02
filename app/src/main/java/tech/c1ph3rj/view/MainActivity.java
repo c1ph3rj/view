@@ -14,6 +14,7 @@ import tech.c1ph3rj.view.custom_forms.CustomForms;
 import tech.c1ph3rj.view.faq.FAQScreen;
 import tech.c1ph3rj.view.line_of_business.LineOfBusinessScreen;
 import tech.c1ph3rj.view.products.ProductsScreen;
+import tech.c1ph3rj.view.speech_recognition.SpeechRecognition;
 import tech.c1ph3rj.view.user_information.UserInformationScreen;
 import tech.c1ph3rj.view.video_kyc.VideoKYCScreen;
 

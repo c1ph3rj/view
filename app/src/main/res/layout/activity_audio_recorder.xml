@@ -48,6 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         app:cardCornerRadius="15dp"
+        android:id="@+id/questionAndAnswerView"
         app:cardElevation="0dp"
         android:layout_weight="1">
 
@@ -59,7 +60,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
-                android:id="@+id/questionAndAnswerView"
                 android:orientation="vertical">
 
                 <TextView

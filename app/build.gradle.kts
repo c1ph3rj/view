@@ -53,4 +53,5 @@ dependencies {
     implementation("androidx.camera:camera-extensions:1.3.1")
     implementation("androidx.camera:camera-video:1.3.1")
     implementation("com.google.mlkit:translate:17.0.2")
+    implementation("com.google.mlkit:language-id:17.0.4")
 }

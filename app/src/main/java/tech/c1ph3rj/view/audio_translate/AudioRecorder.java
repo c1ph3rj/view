@@ -11,7 +11,6 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +43,7 @@ import okhttp3.Response;
 import tech.c1ph3rj.view.PermissionManager;
 import tech.c1ph3rj.view.R;
 import tech.c1ph3rj.view.Services;
+import tech.c1ph3rj.view.speech_recognition.SpeechRecognition;
 
 public class AudioRecorder extends AppCompatActivity {
     PermissionManager permissionManager;
@@ -61,7 +61,7 @@ public class AudioRecorder extends AppCompatActivity {
     TextView answerView;
     ShimmerFrameLayout loadingView;
     TextView userQuestionView;
-    LinearLayout questionAndAnswerLayout;
+    CardView questionAndAnswerLayout;
     Translator outputTranslator = null;
     boolean isTyping;
     int index = 0;
@@ -186,7 +186,7 @@ public class AudioRecorder extends AppCompatActivity {
 
             speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
             recordBtn.setOnClickListener(onClickRecordBtn -> {
-                if(isFrenchModelAvailable && isTamilModelAvailable) {
+                if (isFrenchModelAvailable && isTamilModelAvailable) {
                     if (isTyping) {
                         Toast.makeText(this, "Please wait while the previous response is processing...", Toast.LENGTH_SHORT).show();
                     } else {
@@ -196,7 +196,7 @@ public class AudioRecorder extends AppCompatActivity {
                             String selectedLanguage = languageSpinner.getSelectedItem().toString();
                             final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                             speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                            speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, (selectedLanguage.equals("Tamil")) ? "ta-IN" : "fr");
+                            speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_RESULTS, RecognizerIntent.EXTRA_PARTIAL_RESULTS);
                             speechRecognizer.setRecognitionListener(new RecognitionListener() {
                                 @Override
                                 public void onReadyForSpeech(Bundle bundle) {
@@ -321,8 +321,8 @@ public class AudioRecorder extends AppCompatActivity {
                                     .addOnFailureListener(Throwable::printStackTrace);
                         }
                     }
-                }
-                else {
+                } else {
+                    Toast.makeText(this, "Please wait while the required languages models are downloading...", Toast.LENGTH_SHORT).show();
                     Toast.makeText(this, "Please wait while the required languages models are downloading...", Toast.LENGTH_SHORT).show();
                 }
             });
