@@ -1,13 +1,17 @@
 package tech.c1ph3rj.view.custom_forms;
 
 import static tech.c1ph3rj.view.Services.checkNull;
-import static tech.c1ph3rj.view.Services.response;
+import static tech.c1ph3rj.view.Services.token;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,12 +20,27 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
+import tech.c1ph3rj.view.GetPremium.GetPremium;
 import tech.c1ph3rj.view.R;
 import tech.c1ph3rj.view.Services;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 
 public class CustomForms extends AppCompatActivity {
     Services services;
@@ -29,10 +48,28 @@ public class CustomForms extends AppCompatActivity {
     LinearLayout nextBtn;
     List<FormField> formFields;
 
+    String[] selectedProductIds;
+
+    String premiumCategoryIds;
+    String quotationSearchId,quotationRefId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_forms);
+
+        try {
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setHomeAsUpIndicator(R.drawable.back_ic);
+                getSupportActionBar().setDisplayShowTitleEnabled(true);
+                getSupportActionBar().setTitle("Custom Forms");
+            }
+            init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         services = new Services(this, null);
         init();
@@ -40,13 +77,14 @@ public class CustomForms extends AppCompatActivity {
 
     void init() {
         try {
+            selectedProductIds = getIntent().getStringArrayExtra("productIDs");
+            premiumCategoryIds = getIntent().getStringExtra("premiumCategoryIDs");
+            quotationSearchId = getIntent().getStringExtra("quotationSearchID");
+            quotationRefId = getIntent().getStringExtra("quotationRefID");
             dynamicFormView = findViewById(R.id.dynamicFormView);
             nextBtn = findViewById(R.id.nextBtn);
-            formFields = extractFormFieldsFromResponse(response);
-            DynamicFormAdapter dynamicFormAdapter = new DynamicFormAdapter(this, formFields);
-            dynamicFormView.setLayoutManager(new LinearLayoutManager(this));
-            dynamicFormView.setAdapter(dynamicFormAdapter);
-
+            services.showDialog();
+            getProducts();
             nextBtn.setOnClickListener(onClickNext -> {
                 for(FormField eachFormField : formFields) {
                     if(eachFormField.isRequired) {
@@ -62,9 +100,143 @@ public class CustomForms extends AppCompatActivity {
                         }
                     }
                 }
+
                 //TODO Redirect to the next api.
+                Intent intent = new Intent(this, GetPremium.class);
+                intent.putExtra("getPremiumBody",getAnswerValues().toString());
+                startActivity(intent);
             });
         } catch (Exception e) {
+            services.handleException(e);
+        }
+    }
+
+    private JsonObject getAnswerValues(){
+        try {
+            JsonObject answerValues = new JsonObject();
+            for(FormField eachFormField : formFields) {
+                answerValues.addProperty(eachFormField.getKey(),eachFormField.getValue());
+            }
+
+            answerValues.add("productIDs",new Gson().toJsonTree((convertStringArrayToInt(selectedProductIds))));
+            answerValues.addProperty("quotationSearchID",quotationSearchId);
+            answerValues.addProperty("quotationRefID",quotationRefId);
+            return  answerValues;
+        } catch (Exception e) {
+            e.printStackTrace();
+            services.handleException(e);
+        }
+       return  new JsonObject();
+    }
+
+    private int[] convertStringArrayToInt(String[] stringArray) {
+        int length = stringArray.length;
+        int[] intArray = new int[length];
+
+        for (int i = 0; i < length; i++) {
+            // Use Integer.parseInt to convert each element of stringArray to an int
+            intArray[i] = Integer.parseInt(stringArray[i]);
+        }
+
+        return intArray;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        getOnBackPressedDispatcher().onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void getProducts(){
+        try {
+            if (services.isNetworkConnected()) {
+                if (services.checkGpsStatus()) {
+                    new Thread(() -> {
+                        try {
+                            String baseUrl = services.baseUrl + "api/digital/core/PremiumLogic/GetProducts";
+                            OkHttpClient client = new OkHttpClient.Builder()
+                                    .connectTimeout(120, TimeUnit.SECONDS)
+                                    .writeTimeout(120, TimeUnit.SECONDS)
+                                    .readTimeout(120, TimeUnit.SECONDS)
+                                    .build();
+                            final MediaType JSON
+                                    = MediaType.parse("application/json; charset=utf-8");
+                            JsonObject details = new JsonObject();
+                            details.add("productIDs", null);
+                            details.addProperty("quotationSearchID", quotationSearchId);
+                            details.add("premiumCategoryIDs",  new Gson().toJsonTree(Arrays.asList()));
+
+                            String insertString = details.toString();
+
+
+                            RequestBody body = RequestBody.create(insertString, JSON);
+                            Request request = new Request.Builder()
+                                    .url(baseUrl)
+                                    .header("Authorization", "Bearer " + token)
+                                    .post(body)
+                                    .build();
+
+                            Response staticResponse;
+
+                            try {
+                                staticResponse = client.newCall(request).execute();
+
+                                if (staticResponse.body() != null) {
+                                    if (staticResponse.code() == 401) {
+                                        //TODO HANDLE UN AUTH
+                                    } else {
+                                        String responseString = staticResponse.body().string();
+                                        JSONObject staticResObj = new JSONObject(responseString);
+                                        String rCode = staticResObj.optString("rcode");
+                                        if (checkNull(rCode)) {
+                                            if (rCode.equals("401")) {
+                                                services.dismissDialog();
+                                                //TODO HANDLE UN AUTH
+                                            } else if (rCode.equals("200")) {
+                                                //TODO HANDLE SUCCESS
+                                                JSONObject rObj = staticResObj.getJSONObject("rObj");
+                                                formFields = extractFormFieldsFromResponse(responseString);
+                                                runOnUiThread(() -> {
+                                                    DynamicFormAdapter dynamicFormAdapter = new DynamicFormAdapter(CustomForms.this, formFields);
+                                                    dynamicFormView.setLayoutManager(new LinearLayoutManager(CustomForms.this));
+                                                    dynamicFormView.setAdapter(dynamicFormAdapter);
+                                                });
+                                                services.dismissDialog();
+                                            } else {
+                                                services.dismissDialog();
+                                                JSONArray rMsg = staticResObj.getJSONArray("rmsg");
+                                                services.showErrorMessageFromAPI(rMsg);
+                                            }
+                                        } else {
+                                            stopLoading();
+                                            services.somethingWentWrong();
+                                        }
+                                    }
+                                } else {
+                                    stopLoading();
+                                    services.somethingWentWrong();
+                                }
+
+
+                            } catch (Exception e) {
+                                services.dismissDialog();
+                                services.handleException(e);
+                            }
+                        } catch (Exception e) {
+                            services.dismissDialog();
+                            services.handleException(e);
+                        }
+                    }).start();
+                } else {
+                    services.redirectToGpsSettings();
+                    stopLoading();
+                }
+            } else {
+                services.dismissDialog();
+                //TODO HANDLE NETWORK
+            }
+        } catch (Exception e) {
+            services.dismissDialog();
             services.handleException(e);
         }
     }
@@ -132,6 +304,10 @@ public class CustomForms extends AppCompatActivity {
         }
 
         return formFields;
+    }
+
+    private void stopLoading() {
+        services.dismissDialog();
     }
 
 }

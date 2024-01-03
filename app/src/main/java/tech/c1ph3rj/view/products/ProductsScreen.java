@@ -60,7 +60,7 @@ public class ProductsScreen extends AppCompatActivity {
         try {
             ActionBar actionBar = getSupportActionBar();
             if(actionBar != null) {
-                actionBar.setTitle("Products Screen");
+                actionBar.setTitle("Products");
                 actionBar.setHomeAsUpIndicator(R.drawable.back_ic);
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
@@ -96,7 +96,9 @@ public class ProductsScreen extends AppCompatActivity {
                     String eachProductId = selectedProducts.get(i);
                     productIds[i] = eachProductId;
                 }
+
                 intent.putExtra("productIds", productIds);
+                intent.putExtra("lineOfBusinessId",lineOfBusinessId);
                 startActivity(intent);
             });
             productsAdapter = new ProductsAdapter(this, new ArrayList<>(), new ProductsAdapter.onProductSelectionListener() {

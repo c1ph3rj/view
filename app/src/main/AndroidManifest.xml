@@ -55,6 +55,9 @@
             android:name=".custom_forms.CustomForms"
             android:exported="false" />
         <activity
+            android:name=".GetPremium.GetPremium"
+            android:exported="false" />
+        <activity
             android:name=".user_information.UserInformationScreen"
             android:exported="false" />
         <activity

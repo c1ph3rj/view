@@ -33,6 +33,7 @@ import com.google.mlkit.nl.translate.TranslatorOptions;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -56,6 +57,7 @@ public class AudioRecorder extends AppCompatActivity {
     boolean isRecording;
     boolean isTamilModelAvailable = false;
     boolean isFrenchModelAvailable = false;
+    boolean isHindiModelAvailable = false;
     String question;
     Translator languageTranslator = null;
     TextView answerView;
@@ -115,6 +117,8 @@ public class AudioRecorder extends AppCompatActivity {
                     new TranslateRemoteModel.Builder(TranslateLanguage.TAMIL).build();
             TranslateRemoteModel frenchModel =
                     new TranslateRemoteModel.Builder(TranslateLanguage.FRENCH).build();
+            TranslateRemoteModel hindiModel =
+                    new TranslateRemoteModel.Builder(TranslateLanguage.HINDI).build();
             DownloadConditions conditions = new DownloadConditions.Builder()
                     .build();
             modelManager.getDownloadedModels(TranslateRemoteModel.class)
@@ -146,6 +150,19 @@ public class AudioRecorder extends AppCompatActivity {
                                 });
                             } else {
                                 isFrenchModelAvailable = true;
+                            }
+                            if (!models.contains(hindiModel)) {
+                                modelManager.download(hindiModel, conditions).addOnCompleteListener(hindiModelDownloadResult -> {
+                                    if (hindiModelDownloadResult.isSuccessful()) {
+                                        isHindiModelAvailable = true;
+                                    } else {
+                                        if (hindiModelDownloadResult.getException() != null) {
+                                            hindiModelDownloadResult.getException().printStackTrace();
+                                        }
+                                    }
+                                });
+                            } else {
+                                isHindiModelAvailable = true;
                             }
                         } else {
                             if (task.getException() != null) {
@@ -186,17 +203,17 @@ public class AudioRecorder extends AppCompatActivity {
 
             speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
             recordBtn.setOnClickListener(onClickRecordBtn -> {
-                if (isFrenchModelAvailable && isTamilModelAvailable) {
+                if (isFrenchModelAvailable && isTamilModelAvailable && isHindiModelAvailable) {
                     if (isTyping) {
                         Toast.makeText(this, "Please wait while the previous response is processing...", Toast.LENGTH_SHORT).show();
                     } else {
                         if (isRecording) {
                             speechRecognizer.stopListening();
                         } else {
-                            String selectedLanguage = languageSpinner.getSelectedItem().toString();
+                            String selectedLanguage = languageSpinner.getSelectedItem().toString().toLowerCase(Locale.ROOT);
                             final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                             speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                            speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_RESULTS, RecognizerIntent.EXTRA_PARTIAL_RESULTS);
+                            speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, (selectedLanguage.equals("hindi")) ? "hi-IN" : (selectedLanguage.equals("tamil") ? "ta-IN" : "fr"));
                             speechRecognizer.setRecognitionListener(new RecognitionListener() {
                                 @Override
                                 public void onReadyForSpeech(Bundle bundle) {
@@ -227,6 +244,7 @@ public class AudioRecorder extends AppCompatActivity {
 
                                 @Override
                                 public void onError(int i) {
+                                    recorderIc.setImageTintList(ColorStateList.valueOf(getColor(R.color.black)));
                                     isTyping = false;
                                     outputView.setText("");
                                 }
@@ -286,18 +304,18 @@ public class AudioRecorder extends AppCompatActivity {
 
                                 }
                             });
+                            String sourceLanguage = (selectedLanguage.equals("french")) ? TranslateLanguage.FRENCH : (selectedLanguage.equals("tamil")) ? TranslateLanguage.TAMIL : TranslateLanguage.HINDI;
                             TranslatorOptions languageTranslatorOption =
                                     new TranslatorOptions.Builder()
-                                            .setSourceLanguage((selectedLanguage.equals("French")) ? TranslateLanguage.FRENCH : TranslateLanguage.TAMIL)
+                                            .setSourceLanguage(sourceLanguage)
                                             .setTargetLanguage(TranslateLanguage.ENGLISH)
                                             .build();
                             TranslatorOptions responseTranslatorOption =
                                     new TranslatorOptions.Builder()
                                             .setSourceLanguage(TranslateLanguage.ENGLISH)
-                                            .setTargetLanguage((selectedLanguage.equals("French")) ? TranslateLanguage.FRENCH : TranslateLanguage.TAMIL)
+                                            .setTargetLanguage(sourceLanguage)
                                             .build();
-                            languageTranslator =
-                                    Translation.getClient(languageTranslatorOption);
+                            languageTranslator = Translation.getClient(languageTranslatorOption);
                             outputTranslator = Translation.getClient(responseTranslatorOption);
 
                             getLifecycle().addObserver(languageTranslator);
@@ -322,7 +340,6 @@ public class AudioRecorder extends AppCompatActivity {
                         }
                     }
                 } else {
-                    Toast.makeText(this, "Please wait while the required languages models are downloading...", Toast.LENGTH_SHORT).show();
                     Toast.makeText(this, "Please wait while the required languages models are downloading...", Toast.LENGTH_SHORT).show();
                 }
             });

@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -36,6 +37,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import tech.c1ph3rj.view.R;
 import tech.c1ph3rj.view.Services;
+import tech.c1ph3rj.view.custom_forms.CustomForms;
 import tech.c1ph3rj.view.line_of_business.LineOfBusinessModel;
 
 public class UserInformationScreen extends AppCompatActivity {
@@ -44,6 +46,10 @@ public class UserInformationScreen extends AppCompatActivity {
     LinearLayout nextBtn;
     String name, email, phoneNo;
     String[] selectedProductIds;
+
+
+
+    String premiumCategoryIds;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +58,7 @@ public class UserInformationScreen extends AppCompatActivity {
             ActionBar actionBar = getSupportActionBar();
             if(actionBar != null) {
                 actionBar.setTitle("User Information");
+                actionBar.setHomeAsUpIndicator(R.drawable.back_ic);
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setHomeButtonEnabled(true);
             }
@@ -81,6 +88,7 @@ public class UserInformationScreen extends AppCompatActivity {
     void init() {
         try {
             selectedProductIds = getIntent().getStringArrayExtra("productIds");
+            premiumCategoryIds = getIntent().getStringExtra("lineOfBusinessId");
             nameView = findViewById(R.id.nameView);
             emailView = findViewById(R.id.emailView);
             phoneNoView = findViewById(R.id.phoneNoView);
@@ -173,7 +181,17 @@ public class UserInformationScreen extends AppCompatActivity {
                                                 //TODO HANDLE UN AUTH
                                             } else if (rCode.equals("200")) {
                                                 //TODO HANDLE SUCCESS
+                                                JSONObject rObj = staticResObj.getJSONObject("rObj");
+                                                String quotationSearchID = rObj.optString("quotationSearchID");
+                                                String quotationRefId =  rObj.optString("quotationRefID");
+                                                Intent intent = new Intent(this, CustomForms.class);
+                                                intent.putExtra("productIDs",selectedProductIds);
+                                                intent.putExtra("quotationSearchID",quotationSearchID);
+                                                intent.putExtra("quotationRefID",quotationRefId);
+                                                intent.putExtra("premiumCategoryIDs",premiumCategoryIds);
                                                 services.dismissDialog();
+                                                startActivity(intent);
+
                                             } else {
                                                 services.dismissDialog();
                                                 JSONArray rMsg = staticResObj.getJSONArray("rmsg");

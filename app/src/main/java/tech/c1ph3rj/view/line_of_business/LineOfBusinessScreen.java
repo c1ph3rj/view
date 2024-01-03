@@ -86,6 +86,7 @@ public class LineOfBusinessScreen extends AppCompatActivity {
                 LineOfBusinessModel selectedItem = lineOfBusinessAdapter.getItem(i);
                 if (selectedItem != null) {
                     String lineOfBusinessId = selectedItem.masterDataID;
+
                     Intent intent = new Intent(this, ProductsScreen.class);
                     intent.putExtra("lineOfBusinessId", lineOfBusinessId);
                     startActivity(intent);

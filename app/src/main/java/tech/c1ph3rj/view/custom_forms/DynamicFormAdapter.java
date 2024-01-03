@@ -287,7 +287,7 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         context,
                         (view, selectedYear, selectedMonth, selectedDay) -> {
                             // Set the selected date to the EditText
-                            String selectedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
+                            String selectedDate = selectedYear + "-" + (((selectedMonth + 1) <= 9) ? "0" + (selectedMonth + 1) : (selectedMonth + 1)) + "-" + (((selectedDay + 1) <= 9) ? "0" + (selectedDay + 1) : (selectedDay + 1));
                             editText.setText(selectedDate);
                             field.setValue(selectedDate);
                         },

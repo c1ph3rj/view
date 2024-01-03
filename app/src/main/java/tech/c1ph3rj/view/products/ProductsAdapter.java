@@ -80,14 +80,14 @@ public class ProductsAdapter extends ArrayAdapter<ProductsModel> {
         }
 
         if(productsModel != null) {
-            if(checkNull(productsModel.productName)) {
-                viewHolder.titleTextView.setText(productsModel.productName);
+            if(checkNull(productsModel.productUniqueID)) {
+                viewHolder.titleTextView.setText(productsModel.productUniqueID);
             } else {
                 viewHolder.titleTextView.setText(" - ");
             }
 
-            if(checkNull(productsModel.productDescription)) {
-                viewHolder.descriptionTextView.setText(productsModel.productDescription);
+            if(checkNull(productsModel.productName)) {
+                viewHolder.descriptionTextView.setText(productsModel.productName);
             } else {
                 viewHolder.descriptionTextView.setText(" - ");
             }

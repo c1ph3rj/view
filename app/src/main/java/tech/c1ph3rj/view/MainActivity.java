@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import tech.c1ph3rj.library.CurvedBottomNavigation;
+import tech.c1ph3rj.view.GetPremium.GetPremium;
 import tech.c1ph3rj.view.ask_questions.AskQuestionsScreen;
 import tech.c1ph3rj.view.audio_translate.AudioRecorder;
 import tech.c1ph3rj.view.custom_forms.CustomForms;
