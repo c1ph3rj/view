@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             mainOptionsBtn = findViewById(R.id.mainOptionsBtn);
             mainOptionsBtn.setOnClickListener(onClickMainOptions ->
                     startActivity(new Intent(this, LineOfBusinessScreen.class)));
-            startActivity(new Intent(this, AudioRecorder.class));
+//            startActivity(new Intent(this, AudioRecorder.class));
         } catch (Exception e) {
             e.printStackTrace();
         }

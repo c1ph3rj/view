@@ -193,8 +193,6 @@ public class CustomForms extends AppCompatActivity {
                                                 services.dismissDialog();
                                                 //TODO HANDLE UN AUTH
                                             } else if (rCode.equals("200")) {
-                                                //TODO HANDLE SUCCESS
-                                                JSONObject rObj = staticResObj.getJSONObject("rObj");
                                                 formFields = extractFormFieldsFromResponse(responseString);
                                                 runOnUiThread(() -> {
                                                     DynamicFormAdapter dynamicFormAdapter = new DynamicFormAdapter(CustomForms.this, formFields);
