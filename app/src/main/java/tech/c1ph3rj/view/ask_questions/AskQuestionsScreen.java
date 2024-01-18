@@ -31,6 +31,7 @@ import tech.c1ph3rj.view.R;
 import tech.c1ph3rj.view.Services;
 
 public class AskQuestionsScreen extends AppCompatActivity {
+    private final String QUERY_URL = "https://rag-llm.azurewebsites.net/ask_v2";
     Services services;
     TextView answerView;
     ShimmerFrameLayout loadingView;
@@ -41,7 +42,6 @@ public class AskQuestionsScreen extends AppCompatActivity {
     LinearLayout askQuestionLayout;
     boolean isTyping;
     int index = 0;
-    private final String QUERY_URL = "https://rag-llm.azurewebsites.net/ask_v2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

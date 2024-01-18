@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -20,9 +19,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -52,6 +48,21 @@ public class GetPremium extends AppCompatActivity {
     String getPremiumBody;
     GetPremiumModel selectedPremium;
 
+    public static OkHttpClient.Builder generateOkHttpClient(Context context) {
+        try {
+            // Create a simple builder for our http client, this is only for example purposes
+            OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+            httpClientBuilder.readTimeout(180, TimeUnit.SECONDS);
+            httpClientBuilder.writeTimeout(180, TimeUnit.SECONDS);
+            httpClientBuilder.connectTimeout(180, TimeUnit.SECONDS);
+            //Finally set the sslSocketFactory to our builder and build it
+            return httpClientBuilder;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +91,7 @@ public class GetPremium extends AppCompatActivity {
             nextButton = findViewById(R.id.nextButton);
 
             nextButton.setOnClickListener(onClickNext -> {
-                if(selectedPremium == null) {
+                if (selectedPremium == null) {
                     Toast.makeText(context, "Please select a Quotation to continue!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -95,7 +106,7 @@ public class GetPremium extends AppCompatActivity {
     }
 
     void checkNextButtonVisibility() {
-        if(selectedPremium == null) {
+        if (selectedPremium == null) {
             nextButton.setVisibility(View.GONE);
         } else {
             nextButton.setVisibility(View.VISIBLE);
@@ -115,7 +126,6 @@ public class GetPremium extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
     void getPremiumAPI() {
         try {
@@ -211,7 +221,7 @@ public class GetPremium extends AppCompatActivity {
                                                         adapter = new GetPremiumAdapter(premiumList, context, new GetPremiumAdapter.onItemSelectListener() {
                                                             @Override
                                                             public void itemSelected(GetPremiumModel premiumModel, int pos) {
-                                                                if(selectedPremium != null) {
+                                                                if (selectedPremium != null) {
                                                                     int previousPos = premiumList.indexOf(selectedPremium);
                                                                     premiumList.get(previousPos).isSelected = false;
                                                                     adapter.notifyItemChanged(previousPos);
@@ -223,8 +233,8 @@ public class GetPremium extends AppCompatActivity {
 
                                                             @Override
                                                             public void itemUnSelected(int pos) {
-                                                                if(selectedPremium != null) {
-                                                                    if(premiumList.get(pos).equals(selectedPremium)) {
+                                                                if (selectedPremium != null) {
+                                                                    if (premiumList.get(pos).equals(selectedPremium)) {
                                                                         selectedPremium = null;
                                                                     }
                                                                 }
@@ -338,20 +348,4 @@ public class GetPremium extends AppCompatActivity {
                 .setTitle(title)
                 .setMessage(message);
     }// End of alertTheUser().
-
-
-    public static OkHttpClient.Builder generateOkHttpClient(Context context) {
-        try {
-            // Create a simple builder for our http client, this is only for example purposes
-            OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-            httpClientBuilder.readTimeout(180, TimeUnit.SECONDS);
-            httpClientBuilder.writeTimeout(180, TimeUnit.SECONDS);
-            httpClientBuilder.connectTimeout(180, TimeUnit.SECONDS);
-            //Finally set the sslSocketFactory to our builder and build it
-            return httpClientBuilder;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }

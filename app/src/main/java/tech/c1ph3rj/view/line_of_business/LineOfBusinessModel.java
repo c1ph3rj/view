@@ -10,5 +10,6 @@ public class LineOfBusinessModel {
     public String iconURL;
     public String regExValidation;
 
-    public LineOfBusinessModel(){}
+    public LineOfBusinessModel() {
+    }
 }

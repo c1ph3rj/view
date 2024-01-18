@@ -8,16 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import tech.c1ph3rj.library.CurvedBottomNavigation;
-import tech.c1ph3rj.view.GetPremium.GetPremium;
-import tech.c1ph3rj.view.ask_questions.AskQuestionsScreen;
 import tech.c1ph3rj.view.audio_translate.AudioRecorder;
-import tech.c1ph3rj.view.custom_forms.CustomForms;
-import tech.c1ph3rj.view.faq.FAQScreen;
-import tech.c1ph3rj.view.line_of_business.LineOfBusinessScreen;
-import tech.c1ph3rj.view.products.ProductsScreen;
-import tech.c1ph3rj.view.speech_recognition.SpeechRecognition;
-import tech.c1ph3rj.view.user_information.UserInformationScreen;
-import tech.c1ph3rj.view.video_kyc.VideoKYCScreen;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,13 +18,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int ID_MESSAGE = 3;
     private static final int ID_NOTIFICATION = 4;
     private static final int ID_ACCOUNT = 5;
-
+    CardView mainOptionsBtn;
     //    private EditText etPageId;
 //    private TextView tvSelected;
     private CurvedBottomNavigation bottomNavigation;
     private long lastClickTime = 0;
-    CardView mainOptionsBtn;
-
     private int SELECTED_ID;
 
 
@@ -48,10 +37,11 @@ public class MainActivity extends AppCompatActivity {
 
     void init() {
         try {
-            mainOptionsBtn = findViewById(R.id.mainOptionsBtn);
+            startActivity(new Intent(this, AudioRecorder.class));
+            /*mainOptionsBtn = findViewById(R.id.mainOptionsBtn);
             mainOptionsBtn.setOnClickListener(onClickMainOptions ->
-                    startActivity(new Intent(this, LineOfBusinessScreen.class)));
-//            startActivity(new Intent(this, AudioRecorder.class));
+                    //startActivity(new Intent(this, LineOfBusinessScreen.class)));
+            startActivity(new Intent(this, AudioRecorder.class)));*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -125,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(bottomNavigation != null && SELECTED_ID != 0) {
+        if (bottomNavigation != null && SELECTED_ID != 0) {
             bottomNavigation.show(SELECTED_ID);
         }
     }

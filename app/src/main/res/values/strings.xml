@@ -1,5 +1,5 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">view</string>
+<resources>
+    <string name="app_name">Insure Digital Assistant</string>
     <string name="selected_page">%s page is selected!</string>
     <string name="base_url">https://primez-uat-api.azurewebsites.net/</string>
 
@@ -13,9 +13,12 @@
     <string name="reset_timer">00:00:00</string>
 
     <string-array name="languageList">
+        <item>English</item>
         <item>Tamil</item>
         <item>Hindi</item>
         <item>French</item>
+        <item>Swahili</item>
+        <item>Arabic</item>
     </string-array>
 
     <string name="cmn_something_wrong_msg">An unexpected error occurred.</string>

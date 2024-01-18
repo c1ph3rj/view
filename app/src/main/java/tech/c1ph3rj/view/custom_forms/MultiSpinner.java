@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatSpinner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import tech.c1ph3rj.view.R;
@@ -41,7 +40,7 @@ public class MultiSpinner extends AppCompatSpinner implements
 
     @Override
     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-        items.get(which).isSelected =  isChecked;
+        items.get(which).isSelected = isChecked;
     }
 
     @Override
@@ -85,7 +84,7 @@ public class MultiSpinner extends AppCompatSpinner implements
         return true;
     }
 
-    public void setItems(List<FormField.Options> items, ArrayList<String> labels,  String allText,
+    public void setItems(List<FormField.Options> items, ArrayList<String> labels, String allText,
                          MultiSpinnerListener listener) {
         this.items = items;
         this.defaultText = allText;
@@ -94,7 +93,7 @@ public class MultiSpinner extends AppCompatSpinner implements
         selected = new boolean[items.size()];
 
         // all selected by default
-        for(int i = 0; i < items.size() ; i ++) {
+        for (int i = 0; i < items.size(); i++) {
             selected[i] = (items.get(i).isSelected);
         }
         // all text on the spinner

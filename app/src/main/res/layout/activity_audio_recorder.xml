@@ -4,127 +4,290 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".audio_translate.AudioRecorder">
 
-    <Spinner
+    <include
+        android:id="@+id/noInternetLayout"
+        layout="@layout/no_internet_layout" />
+
+    <ScrollView
+        android:id="@+id/customScrollView"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/drop_down_background"
-        android:layout_margin="10dp"
-        android:id="@+id/languageSpinner"
-        android:entries="@array/languageList"/>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/recordBtn"
-        android:layout_margin="20dp"
-        app:cardCornerRadius="360dp">
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:id="@+id/recorderIc"
-            android:src="@drawable/mic_ic"
-            android:padding="15dp"/>
-
-    </androidx.cardview.widget.CardView>
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18dp"
-        android:textAlignment="center"
-        android:padding="16dp"
-        android:id="@+id/outputView"
-        android:textColor="@color/black"/>
-
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="15dp"
-        android:id="@+id/questionAndAnswerView"
-        app:cardElevation="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <ScrollView
+        <LinearLayout
+            android:id="@+id/contentLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <Spinner
+                android:id="@+id/languageSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/drop_down_background"
+                android:entries="@array/languageList" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/recordBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="360dp">
+
+                <ImageView
+                    android:id="@+id/recorderIc"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:padding="15dp"
+                    android:src="@drawable/mic_ic" />
+
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                android:id="@+id/outputView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:orientation="vertical">
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="4dp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
 
-                <TextView
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/questionAndAnswerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/greyLight"
+                android:visibility="gone"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="0dp"
+                app:contentPadding="8dp">
+
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Question :"
-                    android:textStyle="bold"
-                    android:textSize="18dp"
-                    android:textColor="@color/themeColor"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/userQuestionView"
-                    android:letterSpacing=".04"
-                    android:visibility="visible"
-                    android:layout_margin="4dp"
-                    android:text="Type your question in the above text field and press send to get the answer!"
-                    android:background="@drawable/card_background"
-                    android:backgroundTint="@color/greyLight"
-                    android:padding="8dp"
-                    android:lineSpacingExtra="2dp"
-                    android:textSize="16dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Answer :"
-                    android:textStyle="bold"
-                    android:layout_marginTop="8dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/themeColor"/>
-
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/loadingView"
-                    android:visibility="gone"
-                    android:layout_margin="4dp">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingEnd="8dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Question :"
+                            android:textColor="@color/themeColor"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/sendBtn"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/done_ic"
+                            android:visibility="visible"
+                            app:tint="@color/green" />
+
+                        <LinearLayout
+                            android:id="@+id/editBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="bottom"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Edit"
+                                android:textColor="@color/blueHyperLink"
+                                android:textSize="18dp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:padding="4dp"
+                                android:src="@drawable/edit_ic"
+                                app:tint="@color/blueHyperLink" />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/userQuestionView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
                         android:background="@drawable/card_background"
-                        android:backgroundTint="@color/greyDark"/>
+                        android:letterSpacing=".04"
+                        android:lineSpacingExtra="2dp"
+                        android:minHeight="50dp"
+                        android:padding="8dp"
+                        android:text="Type your question in the above text field and press send to get the answer!"
+                        android:textColor="@color/greyDarker"
+                        android:textSize="16dp"
+                        android:visibility="visible" />
 
-                </com.facebook.shimmer.ShimmerFrameLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/answerView"
-                    android:letterSpacing=".04"
-                    android:visibility="gone"
-                    android:layout_margin="4dp"
-                    android:background="@drawable/card_background"
-                    android:backgroundTint="@color/greyLight"
-                    android:padding="8dp"
-                    android:lineSpacingExtra="2dp"
-                    android:textSize="16dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Answer :"
+                            android:textColor="@color/themeColor"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
 
-            </LinearLayout>
+                        <TextView
+                            android:id="@+id/timerText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:textColor="@color/greyLighter"
+                            android:textSize="16dp"
+                            android:visibility="gone" />
 
-        </ScrollView>
 
-    </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end|center"
+                            android:orientation="horizontal">
 
+                            <LinearLayout
+                                android:id="@+id/stopResponse"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="end|center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="stop"
+                                    android:textColor="@color/red"
+                                    android:textSize="18dp"
+                                    android:textStyle="bold" />
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:padding="2dp"
+                                    android:src="@drawable/stop_recording_ic"
+                                    app:tint="@color/red" />
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/loadingView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="150dp"
+                                android:background="@drawable/card_background"
+                                android:backgroundTint="@color/greyDark" />
+
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+
+                        <TextView
+                            android:id="@+id/answerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:background="@drawable/card_background"
+                            android:backgroundTint="@color/white"
+                            android:letterSpacing=".04"
+                            android:lineSpacingExtra="2dp"
+                            android:minHeight="50dp"
+                            android:padding="8dp"
+                            android:textSize="16dp"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/feedBackLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="8dp">
+
+                            <ImageView
+                                android:id="@+id/positiveBtn"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:padding="2dp"
+                                android:src="@drawable/thumbs_up_ic" />
+
+                            <ImageView
+                                android:id="@+id/negativeBtn"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:padding="2dp"
+                                android:src="@drawable/thumbs_down_ic" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="60dp"-->
+    <!--        android:gravity="center"-->
+    <!--        android:background="@color/themeColor"-->
+    <!--        android:id="@+id/sendBtn">-->
+
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="Send"-->
+    <!--            android:textColor="@color/white"-->
+    <!--            android:textSize="18dp"-->
+    <!--            android:textStyle="bold"/>-->
+
+    <!--    </LinearLayout>-->
 </LinearLayout>

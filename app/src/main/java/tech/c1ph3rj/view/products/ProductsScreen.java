@@ -21,7 +21,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.material.button.MaterialButton;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -59,7 +58,7 @@ public class ProductsScreen extends AppCompatActivity {
 
         try {
             ActionBar actionBar = getSupportActionBar();
-            if(actionBar != null) {
+            if (actionBar != null) {
                 actionBar.setTitle("Products");
                 actionBar.setHomeAsUpIndicator(R.drawable.back_ic);
                 actionBar.setDisplayHomeAsUpEnabled(true);
@@ -92,13 +91,13 @@ public class ProductsScreen extends AppCompatActivity {
             nextBtn.setOnClickListener(onClickNext -> {
                 Intent intent = new Intent(this, UserInformationScreen.class);
                 String[] productIds = new String[selectedProducts.size()];
-                for(int i = 0; i < selectedProducts.size(); i++) {
+                for (int i = 0; i < selectedProducts.size(); i++) {
                     String eachProductId = selectedProducts.get(i);
                     productIds[i] = eachProductId;
                 }
 
                 intent.putExtra("productIds", productIds);
-                intent.putExtra("lineOfBusinessId",lineOfBusinessId);
+                intent.putExtra("lineOfBusinessId", lineOfBusinessId);
                 startActivity(intent);
             });
             productsAdapter = new ProductsAdapter(this, new ArrayList<>(), new ProductsAdapter.onProductSelectionListener() {
@@ -106,18 +105,18 @@ public class ProductsScreen extends AppCompatActivity {
                 @Override
                 public void itemChecked(ProductsModel model) {
 //                    if(!selectedProducts.contains(model.productID)) {
-                        selectedProducts.add(model.productID);
-                        model.isChecked = true;
-                        checkNextBtnVisibility();
+                    selectedProducts.add(model.productID);
+                    model.isChecked = true;
+                    checkNextBtnVisibility();
 //                    }
                 }
 
                 @Override
                 public void itemRemoved(ProductsModel model) {
 //                    if(selectedProducts.contains(model.productID)) {
-                        selectedProducts.remove(model.productID);
-                        model.isChecked = false;
-                        checkNextBtnVisibility();
+                    selectedProducts.remove(model.productID);
+                    model.isChecked = false;
+                    checkNextBtnVisibility();
 //                    }
                 }
 
@@ -136,7 +135,7 @@ public class ProductsScreen extends AppCompatActivity {
     }
 
     private void checkNextBtnVisibility() {
-        if(nextBtn != null) {
+        if (nextBtn != null) {
             nextBtn.setVisibility(selectedProducts.isEmpty() ? View.GONE : View.VISIBLE);
         }
     }

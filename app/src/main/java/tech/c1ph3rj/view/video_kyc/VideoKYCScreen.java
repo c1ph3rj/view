@@ -1,5 +1,27 @@
 package tech.c1ph3rj.view.video_kyc;
 
+import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.OrientationEventListener;
+import android.view.ScaleGestureDetector;
+import android.view.Surface;
+import android.view.View;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -32,31 +54,6 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.Manifest;
-import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
-import android.app.Service;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.text.method.ScrollingMovementMethod;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.OrientationEventListener;
-import android.view.ScaleGestureDetector;
-import android.view.Surface;
-import android.view.View;
-import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
@@ -69,7 +66,8 @@ import tech.c1ph3rj.view.PermissionManager;
 import tech.c1ph3rj.view.R;
 import tech.c1ph3rj.view.Services;
 
-public class VideoKYCScreen extends AppCompatActivity implements PermissionManager.PermissionResultListener , RecordingTimer.TimerUpdateListener{
+public class VideoKYCScreen extends AppCompatActivity implements PermissionManager.PermissionResultListener, RecordingTimer.TimerUpdateListener {
+    private final Handler marqueeHandler = new Handler();
     CardView recordBtn;
     CardView flashBtn;
     ImageView flashIcon;
@@ -91,13 +89,11 @@ public class VideoKYCScreen extends AppCompatActivity implements PermissionManag
     ImageAnalysis imageAnalysis;
     RecordingTimer recordingTimer;
     TextView marqueeView;
-    private final Handler marqueeHandler = new Handler();
-
+    Executor executor;
+    ObjectAnimator animator;
     private int scrollX = 0;
     private int deviceWidth = 0;
     private int textWidth = 0;
-    Executor executor;
-    ObjectAnimator animator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +102,7 @@ public class VideoKYCScreen extends AppCompatActivity implements PermissionManag
 
         try {
             ActionBar actionBar = getSupportActionBar();
-            if(actionBar != null) {
+            if (actionBar != null) {
                 actionBar.setTitle("Video KYC");
                 actionBar.setHomeAsUpIndicator(R.drawable.back_ic);
                 actionBar.setDisplayHomeAsUpEnabled(true);
@@ -115,7 +111,7 @@ public class VideoKYCScreen extends AppCompatActivity implements PermissionManag
             e.printStackTrace();
         }
 
-        services =  new Services(this, null);
+        services = new Services(this, null);
         permissionManager = new PermissionManager(this);
         permissionManager.setPermissionResultListener(this);
         if (permissionManager.hasPermissions(permissionManager.cameraAndStoragePermissionArray())) {
@@ -191,6 +187,7 @@ public class VideoKYCScreen extends AppCompatActivity implements PermissionManag
             animator.cancel(); // Cancel the animation when the activity is destroyed
         }
     }
+
     private void handlePause() {
         try {
             isPaused = !isPaused;
@@ -564,7 +561,7 @@ public class VideoKYCScreen extends AppCompatActivity implements PermissionManag
                 flashBtn.setVisibility(View.GONE);
             }
 
-            if(cameraPosition == CameraSelector.LENS_FACING_FRONT) {
+            if (cameraPosition == CameraSelector.LENS_FACING_FRONT) {
                 flashBtn.setVisibility(View.GONE);
             } else {
                 flashBtn.setVisibility(View.VISIBLE);

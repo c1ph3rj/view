@@ -1,13 +1,11 @@
 package tech.c1ph3rj.view.faq;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.ExpandableListView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +25,7 @@ public class FAQScreen extends AppCompatActivity {
 
         try {
             ActionBar actionBar = getSupportActionBar();
-            if(actionBar != null) {
+            if (actionBar != null) {
                 getSupportActionBar().hide();
             }
         } catch (Exception e) {

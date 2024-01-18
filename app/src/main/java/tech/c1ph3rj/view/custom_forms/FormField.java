@@ -5,6 +5,16 @@ import java.util.Comparator;
 import java.util.List;
 
 public class FormField {
+    // To compare FormField objects by their order for sorting
+    public static final Comparator<FormField> BY_ORDER = new Comparator<FormField>() {
+        @Override
+        public int compare(FormField o1, FormField o2) {
+            return Integer.compare(o1.getOrder(), o2.getOrder());
+        }
+    };
+    public boolean isRequired;
+    public String regexPattern;
+    public String validationMsg;
     private String key;
     private String label;
     private String type;
@@ -14,23 +24,10 @@ public class FormField {
     private String templateType;
     private boolean isSelectAllEnabled;
     private List<Options> options;
-    public boolean isRequired;
-    public String regexPattern;
-    public String validationMsg;
-
-    public List<String> getOptionLabels() {
-        return optionLabels;
-    }
-
-    public void setOptionLabels(List<String> optionLabels) {
-        this.optionLabels = optionLabels;
-    }
-
     private List<String> optionLabels;
     private String value;
-
     // Constructor
-    public FormField(String key, String label, String type, String templateType, int order, boolean isMultiple, boolean isSelectAllEnabled,  String placeholder, List<Options> options) {
+    public FormField(String key, String label, String type, String templateType, int order, boolean isMultiple, boolean isSelectAllEnabled, String placeholder, List<Options> options) {
         this.key = key;
         this.label = label;
         this.type = type;
@@ -45,7 +42,7 @@ public class FormField {
                 optionLabels.add("select");
             }
             this.options = options;
-            for(Options eachOption : options) {
+            for (Options eachOption : options) {
                 optionLabels.add(eachOption.label);
             }
         } catch (Exception e) {
@@ -54,10 +51,12 @@ public class FormField {
         this.value = "";
     }
 
-    public static class Options {
-        String label;
-        String id;
-        boolean isSelected;
+    public List<String> getOptionLabels() {
+        return optionLabels;
+    }
+
+    public void setOptionLabels(List<String> optionLabels) {
+        this.optionLabels = optionLabels;
     }
 
     // Getters and Setters
@@ -109,14 +108,6 @@ public class FormField {
         this.options = options;
     }
 
-    // To compare FormField objects by their order for sorting
-    public static final Comparator<FormField> BY_ORDER = new Comparator<FormField>() {
-        @Override
-        public int compare(FormField o1, FormField o2) {
-            return Integer.compare(o1.getOrder(), o2.getOrder());
-        }
-    };
-
     public String getTemplateType() {
         return templateType;
     }
@@ -147,6 +138,12 @@ public class FormField {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public static class Options {
+        String label;
+        String id;
+        boolean isSelected;
     }
 }
 

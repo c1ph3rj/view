@@ -22,6 +22,6 @@ public class ProductsModel {
     public boolean isChecked;
 
 
-
-    public ProductsModel(){}
+    public ProductsModel() {
+    }
 }

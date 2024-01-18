@@ -2,31 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/dateViewLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Label"
-        android:textSize="16sp"
-        android:layout_marginBottom="8dp"/>
+        android:textSize="16sp" />
 
     <EditText
+        android:id="@+id/dateView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:clickable="false"
-        android:longClickable="false"
-        android:focusable="false"
-        android:cursorVisible="false"
-        android:focusableInTouchMode="false"
+        android:autofillHints="@null"
         android:background="@drawable/card_background"
         android:backgroundTint="@color/greyLight"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:inputType="date"
+        android:longClickable="false"
         android:padding="8dp"
-        android:textSize="16dp"
-        android:id="@+id/dateView"
-        android:autofillHints="@null"
-        android:inputType="date" />
+        android:textSize="16dp" />
 
 </LinearLayout>

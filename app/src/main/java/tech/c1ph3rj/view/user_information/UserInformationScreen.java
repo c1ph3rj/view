@@ -3,29 +3,23 @@ package tech.c1ph3rj.view.user_information;
 import static tech.c1ph3rj.view.Services.checkNull;
 import static tech.c1ph3rj.view.Services.token;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.material.button.MaterialButton;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +32,6 @@ import okhttp3.Response;
 import tech.c1ph3rj.view.R;
 import tech.c1ph3rj.view.Services;
 import tech.c1ph3rj.view.custom_forms.CustomForms;
-import tech.c1ph3rj.view.line_of_business.LineOfBusinessModel;
 
 public class UserInformationScreen extends AppCompatActivity {
     Services services;
@@ -48,15 +41,15 @@ public class UserInformationScreen extends AppCompatActivity {
     String[] selectedProductIds;
 
 
-
     String premiumCategoryIds;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_information_screen);
         try {
             ActionBar actionBar = getSupportActionBar();
-            if(actionBar != null) {
+            if (actionBar != null) {
                 actionBar.setTitle("User Information");
                 actionBar.setHomeAsUpIndicator(R.drawable.back_ic);
                 actionBar.setDisplayHomeAsUpEnabled(true);
@@ -100,27 +93,27 @@ public class UserInformationScreen extends AppCompatActivity {
                 phoneNo = phoneNoView.getText().toString().trim();
                 String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
-                if(!checkNull(name)) {
+                if (!checkNull(name)) {
                     Toast.makeText(this, "Please enter your full name to continue!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(!checkNull(phoneNo)) {
+                if (!checkNull(phoneNo)) {
                     Toast.makeText(this, "Please enter your phone number to continue!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(phoneNo.length() < 9) {
+                if (phoneNo.length() < 9) {
                     Toast.makeText(this, "Please enter your valid phone number to continue!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(!checkNull(email)) {
+                if (!checkNull(email)) {
                     Toast.makeText(this, "Please enter your email address to continue!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if(!email.matches(emailRegex)) {
+                if (!email.matches(emailRegex)) {
                     Toast.makeText(this, "Please enter your valid email address to continue!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -183,12 +176,12 @@ public class UserInformationScreen extends AppCompatActivity {
                                                 //TODO HANDLE SUCCESS
                                                 JSONObject rObj = staticResObj.getJSONObject("rObj");
                                                 String quotationSearchID = rObj.optString("quotationSearchID");
-                                                String quotationRefId =  rObj.optString("quotationRefID");
+                                                String quotationRefId = rObj.optString("quotationRefID");
                                                 Intent intent = new Intent(this, CustomForms.class);
-                                                intent.putExtra("productIDs",selectedProductIds);
-                                                intent.putExtra("quotationSearchID",quotationSearchID);
-                                                intent.putExtra("quotationRefID",quotationRefId);
-                                                intent.putExtra("premiumCategoryIDs",premiumCategoryIds);
+                                                intent.putExtra("productIDs", selectedProductIds);
+                                                intent.putExtra("quotationSearchID", quotationSearchID);
+                                                intent.putExtra("quotationRefID", quotationRefId);
+                                                intent.putExtra("premiumCategoryIDs", premiumCategoryIds);
                                                 services.dismissDialog();
                                                 startActivity(intent);
 

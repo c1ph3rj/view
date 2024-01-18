@@ -12,8 +12,10 @@
     <style name="MyDatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/themeColor</item>
         <item name="android:windowBackground">@android:color/white</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/AppTheme.Alert.Button.Positive</item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/AppTheme.Alert.Button.Negative</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/AppTheme.Alert.Button.Positive
+        </item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/AppTheme.Alert.Button.Negative
+        </item>
     </style>
 
     <style name="AppTheme.Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
@@ -30,6 +32,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@color/white</item>
     </style>
+
     <style name="ThemeColorStatusBar" parent="Base.Theme.View">
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">@color/themeColor</item>

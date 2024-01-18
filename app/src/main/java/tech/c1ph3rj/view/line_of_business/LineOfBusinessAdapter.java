@@ -21,16 +21,9 @@ import tech.c1ph3rj.view.R;
 
 public class LineOfBusinessAdapter extends ArrayAdapter<LineOfBusinessModel> {
 
-    private static class ViewHolder {
-        TextView titleTextView;
-        TextView descriptionTextView;
-        ImageView iconView;
-    }
-
     public LineOfBusinessAdapter(Context context, List<LineOfBusinessModel> lineOfBusinessList) {
         super(context, R.layout.list_item_line_of_business, lineOfBusinessList);
     }
-
 
     @Override
     public void addAll(LineOfBusinessModel... items) {
@@ -48,8 +41,6 @@ public class LineOfBusinessAdapter extends ArrayAdapter<LineOfBusinessModel> {
     public int getCount() {
         return super.getCount();
     }
-
-
 
     @NonNull
     @Override
@@ -96,6 +87,12 @@ public class LineOfBusinessAdapter extends ArrayAdapter<LineOfBusinessModel> {
         }
 
         return convertView;
+    }
+
+    private static class ViewHolder {
+        TextView titleTextView;
+        TextView descriptionTextView;
+        ImageView iconView;
     }
 }
 

@@ -8,59 +8,62 @@
     tools:context=".line_of_business.LineOfBusinessScreen">
 
 
-    <include layout="@layout/no_internet_layout" android:id="@+id/noInternetLayout"/>
+    <include
+        android:id="@+id/noInternetLayout"
+        layout="@layout/no_internet_layout" />
 
     <LinearLayout
+        android:id="@+id/lineOfBusinessLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lineOfBusinessLayout"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="5dp"
-            android:layout_margin="16dp">
+            app:cardElevation="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingHorizontal="5dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingHorizontal="5dp">
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/search_ic"/>
+                    android:src="@drawable/search_ic" />
 
                 <EditText
+                    android:id="@+id/searchView"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:paddingHorizontal="8dp"
                     android:background="@null"
-                    android:maxLines="1"
                     android:hint="Search"
-                    android:id="@+id/searchView"
-                    android:textSize="16dp"
-                    />
+                    android:maxLines="1"
+                    android:paddingHorizontal="8dp"
+                    android:textSize="16dp" />
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
-        <include android:id="@+id/loadingView" layout="@layout/list_item_line_of_business_loading"/>
+        <include
+            android:id="@+id/loadingView"
+            layout="@layout/list_item_line_of_business_loading" />
 
         <ListView
+            android:id="@+id/lineOfBusinessView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@null"
-            android:choiceMode="none"
-            android:dividerHeight="0dp"
-            android:listSelector="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
-            android:id="@+id/lineOfBusinessView"/>
+            android:choiceMode="none"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:listSelector="@android:color/transparent" />
 
     </LinearLayout>
 

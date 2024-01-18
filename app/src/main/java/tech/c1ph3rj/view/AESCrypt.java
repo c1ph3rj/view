@@ -21,41 +21,7 @@ public class AESCrypt {
     public static final String KEY = "jf7746yg";
     public static AlgorithmParameterSpec spec;
 
-    public static String encrypt(String value) throws Exception
-    {
-        Key key = generateKey();
-        Cipher cipher = Cipher.getInstance(AESCrypt.ALGORITHM);
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        byte [] encryptedByteValue = cipher.doFinal(value.getBytes("utf-8"));
-        String encryptedValue64 = Base64.encodeToString(encryptedByteValue, Base64.DEFAULT);
-        return encryptedValue64;
-
-    }
-
-    public static String decrypt(String value) throws Exception
-    {
-        Key key = generateKey();
-        Cipher cipher = Cipher.getInstance(AESCrypt.ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE,key);
-        byte[] decryptedValue64 = Base64.decode(value, Base64.DEFAULT);
-        byte [] decryptedByteValue = cipher.doFinal(decryptedValue64);
-        String decryptedValue = new String(decryptedByteValue,"utf-8");
-        return decryptedValue;
-
-    }
-
-    public AlgorithmParameterSpec getIV()
-    {
-        byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
-        IvParameterSpec ivParameterSpec;
-        ivParameterSpec = new IvParameterSpec(iv);
-
-        return ivParameterSpec;
-    }
-
-
-    public AESCrypt(String password) throws Exception
-    {
+    public AESCrypt(String password) throws Exception {
         // hash password with SHA-256 and crop the output to 128-bit for key
         MessageDigest digest = MessageDigest.getInstance("SHA-128");
         digest.update(password.getBytes("UTF-8"));
@@ -64,10 +30,38 @@ public class AESCrypt {
         spec = getIV();
     }
 
-    private static Key generateKey() throws Exception
-    {
-        Key key = new SecretKeySpec(AESCrypt.KEY.getBytes(),AESCrypt.ALGORITHM);
+    public static String encrypt(String value) throws Exception {
+        Key key = generateKey();
+        Cipher cipher = Cipher.getInstance(AESCrypt.ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        byte[] encryptedByteValue = cipher.doFinal(value.getBytes("utf-8"));
+        String encryptedValue64 = Base64.encodeToString(encryptedByteValue, Base64.DEFAULT);
+        return encryptedValue64;
+
+    }
+
+    public static String decrypt(String value) throws Exception {
+        Key key = generateKey();
+        Cipher cipher = Cipher.getInstance(AESCrypt.ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, key);
+        byte[] decryptedValue64 = Base64.decode(value, Base64.DEFAULT);
+        byte[] decryptedByteValue = cipher.doFinal(decryptedValue64);
+        String decryptedValue = new String(decryptedByteValue, "utf-8");
+        return decryptedValue;
+
+    }
+
+    private static Key generateKey() throws Exception {
+        Key key = new SecretKeySpec(AESCrypt.KEY.getBytes(), AESCrypt.ALGORITHM);
         return key;
+    }
+
+    public AlgorithmParameterSpec getIV() {
+        byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
+        IvParameterSpec ivParameterSpec;
+        ivParameterSpec = new IvParameterSpec(iv);
+
+        return ivParameterSpec;
     }
 }
 

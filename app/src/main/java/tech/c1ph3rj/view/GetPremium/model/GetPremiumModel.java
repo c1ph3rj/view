@@ -1,11 +1,10 @@
 package tech.c1ph3rj.view.GetPremium.model;
 
-import java.util.Comparator;
 import java.util.Objects;
 
 public class GetPremiumModel {
-    String productName,basicPremium,addonsPremium,discountPremium,beforeTax,taxPremium,totalPremium;
     public boolean isSelected;
+    String productName, basicPremium, addonsPremium, discountPremium, beforeTax, taxPremium, totalPremium;
 
     public GetPremiumModel(String productName, String basicPremium, String addonsPremium, String discountPremium, String beforeTax, String taxPremium, String totalPremium) {
         this.productName = productName;

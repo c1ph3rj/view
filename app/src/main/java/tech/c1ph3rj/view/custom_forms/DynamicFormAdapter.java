@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -40,6 +39,13 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public DynamicFormAdapter(Context context, List<FormField> formFields) {
         this.context = context;
         this.formFields = formFields;
+    }
+
+    static void setRequiredLabel(TextView labelView, String label) {
+        String labelText = label + " *";
+        SpannableString spannableString = new SpannableString(labelText);
+        spannableString.setSpan(new ForegroundColorSpan(Color.RED), labelText.length() - 1, labelText.length(), 0);
+        labelView.setText(spannableString);
     }
 
     @Override
@@ -310,12 +316,5 @@ public class DynamicFormAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public EmptyViewHolder(@NonNull View itemView) {
             super(itemView);
         }
-    }
-
-    static void setRequiredLabel(TextView labelView, String label) {
-        String labelText = label + " *";
-        SpannableString spannableString = new SpannableString(labelText);
-        spannableString.setSpan(new ForegroundColorSpan(Color.RED), labelText.length() - 1, labelText.length(), 0);
-        labelView.setText(spannableString);
     }
 }

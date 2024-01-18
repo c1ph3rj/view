@@ -1,4 +1,5 @@
 package tech.c1ph3rj.view.GetPremium.adapter;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -17,8 +18,8 @@ import tech.c1ph3rj.view.R;
 
 public class GetPremiumAdapter extends RecyclerView.Adapter<GetPremiumAdapter.ViewHolder> {
     private final List<GetPremiumModel> premiumList;
-    private Context context;
     onItemSelectListener listener;
+    private Context context;
 
     public GetPremiumAdapter(List<GetPremiumModel> premiumList, Context context, GetPremiumAdapter.onItemSelectListener listener) {
         this.premiumList = premiumList;
@@ -50,17 +51,17 @@ public class GetPremiumAdapter extends RecyclerView.Adapter<GetPremiumAdapter.Vi
 //            holder.discountLayout.setVisibility(View.VISIBLE);
 //        }
 
-        if(premiumModel.isSelected) {
+        if (premiumModel.isSelected) {
             changeColor(holder.selectedBtn, R.color.greyDark);
             holder.selectedBtnText.setText("Selected");
         } else {
-            changeColor(holder.selectedBtn,R.color.themeColor);
+            changeColor(holder.selectedBtn, R.color.themeColor);
             holder.selectedBtnText.setText("Select");
         }
 
         holder.selectedBtn.setOnClickListener(onClickSelect -> {
-            if(listener != null) {
-                if(!premiumModel.isSelected) {
+            if (listener != null) {
+                if (!premiumModel.isSelected) {
                     premiumModel.isSelected = true;
                     listener.itemSelected(premiumModel, position);
                 } else {
@@ -78,6 +79,12 @@ public class GetPremiumAdapter extends RecyclerView.Adapter<GetPremiumAdapter.Vi
     @Override
     public int getItemCount() {
         return premiumList.size();
+    }
+
+    public interface onItemSelectListener {
+        void itemSelected(GetPremiumModel premiumModel, int position);
+
+        void itemUnSelected(int pos);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -101,11 +108,6 @@ public class GetPremiumAdapter extends RecyclerView.Adapter<GetPremiumAdapter.Vi
             selectedBtnText = itemView.findViewById(R.id.selectBtnText);
 
         }
-    }
-
-    public interface onItemSelectListener {
-        void itemSelected(GetPremiumModel premiumModel, int position);
-        void itemUnSelected(int pos);
     }
 }
 

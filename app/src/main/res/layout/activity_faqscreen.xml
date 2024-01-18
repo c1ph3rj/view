@@ -9,38 +9,38 @@
     tools:context=".faq.FAQScreen">
 
     <ImageView
+        android:id="@+id/backBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="8dp"
-        android:id="@+id/backBtn"
         android:src="@drawable/back_ic"
-        app:tint="@color/themeColor"/>
+        app:tint="@color/themeColor" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
         android:text="FAQ"
         android:textSize="40dp"
-        android:layout_marginBottom="16dp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:textStyle="bold" />
 
     <ExpandableListView
         android:id="@+id/expandableListView"
         android:layout_width="match_parent"
-        android:groupIndicator="@null"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_height="match_parent"/>
+        android:groupIndicator="@null" />
 
     <android.widget.Button
         android:id="@+id/askQuestionsBtn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        android:text="Ask More Questions"
         android:background="@drawable/button_background"
+        android:gravity="center"
+        android:text="Ask More Questions"
         android:textColor="@color/themeColor"
         android:textSize="18dp" />
 
