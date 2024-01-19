@@ -525,19 +525,8 @@ public class AudioRecorder extends AppCompatActivity {
                 public void handleOnBackPressed() {
                     android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(AudioRecorder.this);
                     dialog.setMessage("Are you sure you want to exit the app?");
-                    dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finishAffinity();
-                        }
-                    });
-                    dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
+                    dialog.setPositiveButton("Yes", (dialog1, which) -> finishAffinity());
+                    dialog.setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss());
                     android.app.AlertDialog alert = dialog.create();
                     alert.show();
                 }
