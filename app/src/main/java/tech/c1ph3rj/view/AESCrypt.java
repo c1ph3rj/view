@@ -2,6 +2,7 @@ package tech.c1ph3rj.view;
 
 import android.util.Base64;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.spec.AlgorithmParameterSpec;
@@ -24,7 +25,7 @@ public class AESCrypt {
     public AESCrypt(String password) throws Exception {
         // hash password with SHA-256 and crop the output to 128-bit for key
         MessageDigest digest = MessageDigest.getInstance("SHA-128");
-        digest.update(password.getBytes("UTF-8"));
+        digest.update(password.getBytes(StandardCharsets.UTF_8));
         byte[] keyBytes = new byte[32];
         System.arraycopy(digest.digest(), 0, keyBytes, 0, keyBytes.length);
         spec = getIV();
@@ -34,7 +35,7 @@ public class AESCrypt {
         Key key = generateKey();
         Cipher cipher = Cipher.getInstance(AESCrypt.ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, key);
-        byte[] encryptedByteValue = cipher.doFinal(value.getBytes("utf-8"));
+        byte[] encryptedByteValue = cipher.doFinal(value.getBytes(StandardCharsets.UTF_8));
         String encryptedValue64 = Base64.encodeToString(encryptedByteValue, Base64.DEFAULT);
         return encryptedValue64;
 
@@ -46,7 +47,7 @@ public class AESCrypt {
         cipher.init(Cipher.DECRYPT_MODE, key);
         byte[] decryptedValue64 = Base64.decode(value, Base64.DEFAULT);
         byte[] decryptedByteValue = cipher.doFinal(decryptedValue64);
-        String decryptedValue = new String(decryptedByteValue, "utf-8");
+        String decryptedValue = new String(decryptedByteValue, StandardCharsets.UTF_8);
         return decryptedValue;
 
     }

@@ -1,0 +1,8 @@
+{
+  "ERR100": "Oops! Something went wrong. Please try again later.",
+  "ERR001": "Connection Error: Unable to establish a connection. Please check your internet connection and try again.",
+  "ERR002": "Processing Request: Please hold on for a moment while I process your request.",
+  "ERR003": "Model Downloading: Please wait while the machine learning model is being downloaded. This will just take a few seconds. Thank you for your patience!",
+  "VAL001": "Input Required: Please type or ask something to continue our conversation!",
+  "API001": "Server Error: Oops! Something went wrong on our end. Our servers are experiencing technical difficulties. We apologize for the inconvenience. Please try again later."
+}

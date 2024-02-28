@@ -93,7 +93,6 @@ public class GetPremium extends AppCompatActivity {
             nextButton.setOnClickListener(onClickNext -> {
                 if (selectedPremium == null) {
                     Toast.makeText(context, "Please select a Quotation to continue!", Toast.LENGTH_SHORT).show();
-                    return;
                 }
 
                 //TODO Handle redirect to the next page.

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import tech.c1ph3rj.library.CurvedBottomNavigation;
-import tech.c1ph3rj.view.audio_translate.AudioRecorder;
+import tech.c1ph3rj.view.audio_translate.LLMAssistant;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
 
     void init() {
         try {
-            startActivity(new Intent(this, AudioRecorder.class));
+            startActivity(new Intent(this, LLMAssistant.class));
             /*mainOptionsBtn = findViewById(R.id.mainOptionsBtn);
             mainOptionsBtn.setOnClickListener(onClickMainOptions ->
                     //startActivity(new Intent(this, LineOfBusinessScreen.class)));
-            startActivity(new Intent(this, AudioRecorder.class)));*/
+            startActivity(new Intent(this, LLMAssistant.class)));*/
         } catch (Exception e) {
             e.printStackTrace();
         }

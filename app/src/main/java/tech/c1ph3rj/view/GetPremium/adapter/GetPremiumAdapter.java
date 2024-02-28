@@ -19,7 +19,7 @@ import tech.c1ph3rj.view.R;
 public class GetPremiumAdapter extends RecyclerView.Adapter<GetPremiumAdapter.ViewHolder> {
     private final List<GetPremiumModel> premiumList;
     onItemSelectListener listener;
-    private Context context;
+    private final Context context;
 
     public GetPremiumAdapter(List<GetPremiumModel> premiumList, Context context, GetPremiumAdapter.onItemSelectListener listener) {
         this.premiumList = premiumList;

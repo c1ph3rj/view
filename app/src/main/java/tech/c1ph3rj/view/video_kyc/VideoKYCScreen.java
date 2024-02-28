@@ -91,9 +91,9 @@ public class VideoKYCScreen extends AppCompatActivity implements PermissionManag
     TextView marqueeView;
     Executor executor;
     ObjectAnimator animator;
-    private int scrollX = 0;
-    private int deviceWidth = 0;
-    private int textWidth = 0;
+    private final int scrollX = 0;
+    private final int deviceWidth = 0;
+    private final int textWidth = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

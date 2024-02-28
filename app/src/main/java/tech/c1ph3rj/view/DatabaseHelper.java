@@ -52,11 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ContentValues contentValues = new ContentValues();
             contentValues.put("TokenValue", AESCrypt.encrypt(token));
             long result = db.insert(TokenTable, null, contentValues);
-            if (result == -1) {
-                return false;
-            } else {
-                return true;
-            }
+            return result != -1;
         } catch (Exception ex) {
             ex.getStackTrace();
             return false;
@@ -73,7 +69,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteTokenData() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from " + TokenTable);
-        return;
     }
 }
 

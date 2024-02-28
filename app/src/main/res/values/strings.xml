@@ -24,4 +24,18 @@
     <string name="cmn_something_wrong_msg">An unexpected error occurred.</string>
     <string name="gps_not_enabled">GPS locations is not enabled.Please enable it</string>
     <string name="nonetwork">Please check your network connection</string>
+    <string name="speak">Speak...</string>
+    <string name="listening">Listening...</string>
+    <string name="processing">Processing...</string>
+    <string name="standard_exception">ERR000</string>
+    <string name="ERR002">ERR002</string>
+    <string name="ERR004">ERR004</string>
+    <string name="ERR003">ERR003</string>
+    <string name="ERR100">ERR100</string>
+    <string name="VAL001">VAL001</string>
+    <string name="exit_confirmation">Are you sure you want to exit the app?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="API001">API001</string>
+    <string name="ERR001">ERR001</string>
 </resources>

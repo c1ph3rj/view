@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -225,7 +226,7 @@ public class CustomForms extends AppCompatActivity {
                         JsonObject details = new JsonObject();
                         details.add("productIDs", null);
                         details.addProperty("quotationSearchID", quotationSearchId);
-                        details.add("premiumCategoryIDs", new Gson().toJsonTree(Arrays.asList()));
+                        details.add("premiumCategoryIDs", new Gson().toJsonTree(Collections.emptyList()));
 
                         String insertString = details.toString();
 

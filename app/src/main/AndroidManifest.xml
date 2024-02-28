@@ -39,7 +39,7 @@
             android:name=".speech_recognition.SpeechRecognition"
             android:exported="false" />
         <activity
-            android:name=".audio_translate.AudioRecorder"
+            android:name=".audio_translate.LLMAssistant"
             android:exported="false" />
         <activity
             android:name=".ask_questions.AskQuestionsScreen"
