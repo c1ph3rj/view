@@ -16,4 +16,46 @@
     <color name="red">#D80032</color>
     <color name="blueHyperLink">#0000FF</color>
     <color name="green">#65B741</color>
+
+
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+
+
+    <color name="app_theme">#35488A</color>
+
+    <color name="shimmer_text">#777E8A</color>
+    <color name="text_border">#9E9090</color>
+    <color name="disabledColor">#BDBDBD</color>
+    <color name="shimmer_button">#2680DF</color>
+    <color name="glass">#80ffffff</color>
+
+    <color name="darkcolor">#5086888A</color>
+    <color name="darkcolorgrey">#9086888A</color>
+    <color name="bluehyperlink">#0000FF</color>
+    <color name="Tacao">#f4b183</color>
+    <color name="draftColor">#E1512C</color>
+    <color name="amber">#FFC001</color>
+    <color name="yellow">#E6E603</color>
+    <color name="atlantis">#92D051</color>
+    <color name="textgrey">#595957</color>
+
+    <color name="light_green">#70b603</color>
+    <color name="lime_yellow_text">#80FFFF33</color>
+    <color name="brightyellow">#ffff00</color>
+
+    <color name="teal_700">#FF018786</color>
+
+    <color name="app_background">#f5f5f5</color>
+    <color name="light_sky_blue">#81D3F8</color>
+    <color name="chatSend">#BDEAEA</color>
+    <color name="chatReceive">#CEDAAB</color>
+    <color name="blur">#ABCDDEEF</color>
+
+    <color name="lightestGrey">#F3F3F3</color>
+    <color name="transparent">#00000000</color>
+    <color name="toggle_grey">#ABBDBB</color>
+    <color name="webview_bg">#f6f6f6</color>
+    <color name="qwe">#FA4D2E</color>
+    <color name="maroon">#BB1E35</color>
 </resources>

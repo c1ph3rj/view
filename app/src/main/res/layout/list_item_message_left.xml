@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:id="@+id/receiverView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal"
+        android:layout_marginVertical="5dp"
+        android:layout_marginHorizontal="10dp"
+        android:gravity="start|center_horizontal"
+        >
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:shimmer_auto_start="true"
+            android:id="@+id/loadingView">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/chatReceive"
+                app:cardCornerRadius="10dp"
+                android:elevation="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="140dp"
+                        android:layout_height="14dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginStart="2dp"
+                        android:maxWidth="200dp"
+                        android:layout_margin="4dp"
+                        android:background="@color/greyDark"
+                        android:visibility="visible"
+                        />
+
+                    <TextView
+                        android:layout_width="50dp"
+                        android:layout_height="10dp"
+                        android:textStyle="bold"
+                        android:maxWidth="200dp"
+                        android:layout_margin="4dp"
+                        android:background="@color/app_theme"
+                        />
+
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/chatReceive"
+            app:cardCornerRadius="8dp"
+            android:elevation="5dp"
+            android:visibility="gone"
+            android:id="@+id/messageCardView"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/participantMessage"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginStart="2dp"
+                    android:maxWidth="200dp"
+                    android:textSize="14dp"
+                    android:letterSpacing=".04"
+                    android:textColor="@color/black"
+                    android:visibility="visible"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/participantName"
+                    android:textStyle="bold"
+                    android:maxWidth="200dp"
+                    android:layout_marginTop="5dp"
+                    android:textSize="10dp"
+                    android:textColor="@color/app_theme"
+                    />
+
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -66,6 +66,10 @@
         <activity
             android:name=".line_of_business.LineOfBusinessScreen"
             android:exported="false" />
+
+        <activity android:name=".ChatScreen.ChatScreen"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

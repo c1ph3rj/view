@@ -221,7 +221,9 @@ public class LLMAssistant extends AppCompatActivity {
     private void checkLanguageModelsAvailability() {
         try {
             RemoteModelManager modelManager = RemoteModelManager.getInstance();
+
             TranslateRemoteModel englishModel = new TranslateRemoteModel.Builder(TranslateLanguage.ENGLISH).build();
+//            TranslateRemoteModel tamilModel = new TranslateRemoteModel.Builder(TranslateLanguage.TAMIL).build();
             modelManager.getDownloadedModels(TranslateRemoteModel.class)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -240,6 +242,20 @@ public class LLMAssistant extends AppCompatActivity {
                             } else {
                                 isEnglishModelAvailable = true;
                             }
+//                            if(!models.contains(tamilModel)) {
+//                                downloadLanguageModel(tamilModel,
+//                                        tamilModelDownloadResult -> {
+//                                            if (tamilModelDownloadResult.isSuccessful()) {
+//                                                isTamilModelAvailable = true;
+//                                            } else {
+//                                                if (tamilModelDownloadResult.getException() != null) {
+//                                                    tamilModelDownloadResult.getException().printStackTrace();
+//                                                }
+//                                            }
+//                                        });
+//                            } else {
+//                                isTamilModelAvailable = true;
+//                            }
                         } else {
                             if (task.getException() != null) {
                                 showExceptionMsg(R.string.ERR100);
@@ -447,10 +463,12 @@ public class LLMAssistant extends AppCompatActivity {
                         if (isEnglishModelAvailable) {
                             if (isTyping) {
                                 showExceptionMsg(R.string.ERR002);
-                            } else {
+                            }
+                            else {
                                 if (isRecording) {
                                     speechRecognizer.stopListening();
-                                } else {
+                                }
+                                else {
                                     String selectedLanguage = languageSpinner.getSelectedItem().toString().toLowerCase(Locale.ROOT);
                                     final Intent speechRecognizerIntent = getSpeechRecognizerIntent(selectedLanguage);
                                     speechRecognizer.setRecognitionListener(new RecognitionListener() {
@@ -632,8 +650,8 @@ public class LLMAssistant extends AppCompatActivity {
                         startLoading();
                         final MediaType JSON = MediaType.get("application/json");
                         JsonObject responseBodyObj = new JsonObject();
-                        responseBodyObj.addProperty("index", "dubai_mall_index");
-                        responseBodyObj.addProperty("collection_name", "dubai_mall");
+                        responseBodyObj.addProperty("index", "aki_insurance_index");
+                        responseBodyObj.addProperty("collection_name", "aki_insurance");
                         responseBodyObj.addProperty("question", translatedText);
                         RequestBody requestBody = RequestBody.create(responseBodyObj.toString(), JSON);
                         askLlmAPI(requestBody, urlBuilder.build().url().toString());
@@ -685,7 +703,8 @@ public class LLMAssistant extends AppCompatActivity {
                             client.newCall(request).enqueue(new Callback() {
                                 @Override
                                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                                    showExceptionMsg(R.string.API001);
+                                    String errorMsg = "("+ getString(R.string.API001) + ") " + getException(R.string.API001);
+                                    answerView.setText(errorMsg);
                                     e.printStackTrace();
                                 }
 
@@ -698,6 +717,7 @@ public class LLMAssistant extends AppCompatActivity {
                                             if (responseBody != null) {
                                                 BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody.byteStream()));
                                                 String line;
+                                                System.out.println("Here START");
                                                 AtomicBoolean isStoppedLoading = new AtomicBoolean(false);
                                                 StringBuilder responseString = new StringBuilder();
                                                 while (!call.isCanceled() && !isResponseStopped && ((line = reader.readLine()) != null)) {
@@ -720,6 +740,7 @@ public class LLMAssistant extends AppCompatActivity {
                                                     // Each line is a complete JSON object
                                                     JSONObject jsonObject = new JSONObject(line);
                                                     try {
+                                                        System.out.println(line);
                                                         responseString.append(jsonObject.optString("response"));
                                                         String finalResponseString = responseString.toString();
                                                         runOnUiThread(() -> answerView.setText(finalResponseString));
@@ -727,6 +748,7 @@ public class LLMAssistant extends AppCompatActivity {
                                                     } catch (Exception e) {
                                                         showExceptionMsg(R.string.API001);
                                                         e.printStackTrace();
+                                                        handleCompleteResponse();
                                                     }
                                                     // Process the JSON object as needed
                                                 }
@@ -735,6 +757,8 @@ public class LLMAssistant extends AppCompatActivity {
                                                     timerText.setText(timer.stopTimer());
                                                     timerText.setVisibility(View.VISIBLE);
                                                 });
+
+                                                System.out.println("Here END");
                                             }
                                         }
                                     } catch (Exception e) {
@@ -744,7 +768,8 @@ public class LLMAssistant extends AppCompatActivity {
                                             stopResponse.setVisibility(View.VISIBLE);
                                             answerView.setVisibility(View.VISIBLE);
                                             handleCompleteResponse();
-                                            answerView.setText(getException(R.string.API001));
+                                            String errorMsg = "("+ getString(R.string.API001) + ") " + getException(R.string.API001);
+                                            answerView.setText(errorMsg);
                                         });
                                         e.printStackTrace();
                                     }
@@ -754,7 +779,9 @@ public class LLMAssistant extends AppCompatActivity {
                             stopLoading();
                             isTyping = false;
                             runOnUiThread(() -> editBtn.setVisibility(View.VISIBLE));
-                            showExceptionMsg(R.string.API001);
+                            String errorMsg = "("+ getString(R.string.API001) + ") " + getException(R.string.API001);
+                            answerView.setText(errorMsg);
+                            handleCompleteResponse();
                             e.printStackTrace();
                         }
                     } catch (Exception e) {
@@ -762,6 +789,7 @@ public class LLMAssistant extends AppCompatActivity {
                         isTyping = false;
                         runOnUiThread(() -> editBtn.setVisibility(View.VISIBLE));
                         showExceptionMsg(R.string.ERR100);
+                        handleCompleteResponse();
                         e.printStackTrace();
                     }
                 });
@@ -769,11 +797,13 @@ public class LLMAssistant extends AppCompatActivity {
             } else {
                 stopLoading();
                 isTyping = false;
+                handleCompleteResponse();
                 showExceptionMsg(R.string.ERR001);
             }
         } catch (Exception e) {
             stopLoading();
             isTyping = false;
+            handleCompleteResponse();
             showExceptionMsg(R.string.ERR001);
             e.printStackTrace();
         }
