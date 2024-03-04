@@ -78,7 +78,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                     }
                 }
             }
-            System.out.println("Hi");
         } catch (Exception ex) {
             ex.printStackTrace();
         }

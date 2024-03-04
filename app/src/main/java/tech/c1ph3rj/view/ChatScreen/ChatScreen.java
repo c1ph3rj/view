@@ -356,8 +356,9 @@ public class ChatScreen extends AppCompatActivity {
                 try {
                     if (isTyping) {
                         if (currentResponseCall != null && !isResponseStopped) {
-                            currentResponseCall.cancel();
                             isResponseStopped = true;
+                            currentResponseCall.cancel();
+                            lastChatResponse.senderName = "Digital Assistant (Stopped)";
                             lastChatResponse.date = getTime();
                             sendButton.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.chat_send_inline));
                             return;
@@ -529,7 +530,7 @@ public class ChatScreen extends AppCompatActivity {
                                                 AtomicBoolean isStoppedLoading = new AtomicBoolean(false);
                                                 StringBuilder responseString = new StringBuilder();
                                                 currentResponseCall = call;
-                                                runOnUiThread(() -> sendButton.setImageDrawable(AppCompatResources.getDrawable(ChatScreen.this, R.drawable.stop_recording_ic)));
+                                                runOnUiThread(() -> sendButton.setImageDrawable(AppCompatResources.getDrawable(ChatScreen.this, R.drawable.stop_response_ic)));
                                                 while (!call.isCanceled() && !isResponseStopped && ((line = reader.readLine()) != null)) {
                                                     if (responseString.length() > 1 && !isStoppedLoading.get()) {
                                                         runOnUiThread(() -> {
